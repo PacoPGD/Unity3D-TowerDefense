@@ -1,0 +1,45 @@
+﻿using UnityEngine;
+using System.Collections;
+
+public class CameraMovement : MonoBehaviour {
+	
+	public float moveSpeed = 2.0f;	// Speed of camera following mouse
+
+
+
+	// Update is called once per frame
+	void Update () {
+
+		MouseFollow ();
+		CameraZoom ();
+
+	}
+
+
+	void MouseFollow(){
+		//HORIZONTAL
+		if(Input.mousePosition.x<0)
+			transform.position=transform.position-new Vector3(moveSpeed,0,0);
+		if(Input.mousePosition.x>Screen.width)
+			transform.position=transform.position+new Vector3(moveSpeed,0,0);
+
+		//VERTICAL
+		if(Input.mousePosition.y<0)
+			transform.position=transform.position-new Vector3(0,0,moveSpeed);
+		if(Input.mousePosition.y>Screen.height)
+			transform.position=transform.position+new Vector3(0,0,moveSpeed);
+	}
+
+	void CameraZoom(){
+		//ZOOM IN
+		/*
+		if (Input.GetAxis ("Mouse ScrollWheel") > 0) {
+
+		}*/
+		/*
+		//ZOOM OUT
+		if (Input.GetAxis ("Mouse ScrollWheel") < 0) {
+
+		}*/
+	}
+}
