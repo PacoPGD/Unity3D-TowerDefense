@@ -4,7 +4,7 @@ using System.Collections;
 public class CameraMovement : MonoBehaviour {
 	
 	public float moveSpeed = 2.0f;	// Speed of camera following mouse
-
+	public float zoomSpeed = 4.0f; // Speed of camera zoom
 
 
 	// Update is called once per frame
@@ -32,14 +32,14 @@ public class CameraMovement : MonoBehaviour {
 
 	void CameraZoom(){
 		//ZOOM IN
-		/*
-		if (Input.GetAxis ("Mouse ScrollWheel") > 0) {
 
-		}*/
-		/*
+		if (Input.GetAxis ("Mouse ScrollWheel") > 0) {
+			transform.position =transform.position+ new Vector3(0,-zoomSpeed,zoomSpeed);
+		}
+
 		//ZOOM OUT
 		if (Input.GetAxis ("Mouse ScrollWheel") < 0) {
-
-		}*/
+			transform.position =transform.position+ new Vector3(0,zoomSpeed,-zoomSpeed);
+		}
 	}
 }
