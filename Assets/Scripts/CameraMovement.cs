@@ -12,7 +12,7 @@ public class CameraMovement : MonoBehaviour {
 
 		MouseFollow ();
 		CameraZoom ();
-
+		CameraRotation ();
 	}
 
 
@@ -41,5 +41,9 @@ public class CameraMovement : MonoBehaviour {
 		if (Input.GetAxis ("Mouse ScrollWheel") < 0) {
 			transform.position =transform.position+ new Vector3(0,zoomSpeed,-zoomSpeed);
 		}
+	}
+
+	void CameraRotation(){
+
 	}
 }

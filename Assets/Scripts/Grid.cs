@@ -1,46 +1,54 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.Collections;
 
-public class Grid : MonoBehaviour {
+public class Grid : MonoBehaviour 
+{
 
-	private float altitude = 0.1f;
-	private Square [][]board; //Board of the game
-	private int xBoardSize = 20; //Number of boxes in X
-	private int yBoardSize = 20; //Number of boxes in Y
-	private int boxSize = 10; //Size of one box
+	public GameObject square; //A plane GameObject, represent a square
+	public int xSize=10;
+	public int zSize=10;
 
-	int i,j;
 
-	void Start(){
-		for (i=0; i<xBoardSize; i++)
-			for (j=0; j<yBoardSize; j++)
-				board [i] [j] = new Square(i,j);
+	private int width = 10; //width of a square
+	private int height = 10; //height of a square
 
-	}
+	private GameObject [,] grid = new GameObject[xSize,zSize];  //set of squares representing the board
 
-	void Update(){
+	void Awake()
+	{
 	
+		for (int x = 0; x < xSize; x++) 
+		{
+			for(int z = 0; z < zSize; z++)
+			{
+				GameObject gridPlane = (GameObject)Instantiate (square);
+				gridPlane.transform.position = new Vector3(gridPlane.transform.position.x +x*width,
+					gridPlane.transform.position.y, gridPlane.transform.position.z + z*height);  
+				grid[x,z] = gridPlane;
+			}
+		}
+
 	}
 
-	void OnPostRender(){
-		for (i=0; i<xBoardSize; i++){
-			for (j=0; j<yBoardSize; j++){
-				int xPos = i*boxSize;
-				int zPos = j*boxSize;
+	// Use this for initialization
+	void Start () 
+	{
 
-				GL.Begin(GL.LINES);
-				GL.Color(Color.red);
-				GL.Vertex3(xPos, altitude, zPos);
-				GL.Vertex3(xPos+boxSize, altitude, zPos);
-				GL.Vertex3(xPos+boxSize, altitude, zPos);
-				GL.Vertex3(xPos+boxSize, altitude, zPos+boxSize);
-				GL.Vertex3(xPos+boxSize, altitude, zPos+boxSize);
-				GL.Vertex3(xPos, altitude, zPos+boxSize);
-				GL.Vertex3(xPos, altitude, zPos+boxSize);
-				GL.Vertex3(xPos, altitude, zPos);
-				GL.End();
+
+	}
+	
+	// Update is called once per frame
+	void Update () 
+	{
+		for (int x = 0; x < xSize; x++) 
+		{
+			for(int z = 0; z < zSize; z++)
+			{
+				if(Input.mousePosition.x>grid[x,z].transform.position.x)
+					grid[x,z].GetComponent<Renderer>().material.color = Color.red;
+				else
+					grid[x,z].GetComponent<Renderer>().material.color = Color.white;
 			}
 		}
 	}
-
 }
