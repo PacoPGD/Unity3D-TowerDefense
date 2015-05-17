@@ -5,7 +5,7 @@ public class CameraMovement : MonoBehaviour {
 	
 	public float moveSpeed = 2.0f;	// Speed of camera following mouse
 	public float zoomSpeed = 4.0f; // Speed of camera zoom
-
+	public float rotSpeed = 4.0f; // Speed of camera rotation
 
 	// Update is called once per frame
 	void Update () {
