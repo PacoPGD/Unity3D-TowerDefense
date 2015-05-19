@@ -26,8 +26,6 @@ public class Grid : MonoBehaviour
 				gridPlane.transform.position = new Vector3(gridPlane.transform.position.x +x*width,
 					gridPlane.transform.position.y, gridPlane.transform.position.z + z*height);  
 				grid[x,z] = gridPlane;
-				grid [x,z].GetComponent<Square>().setX(x);
-				grid [x,z].GetComponent<Square>().setZ(z);
 
 				if(z==zSize-1)
 					grid [x,z].GetComponent<Square>().setGenerator();
@@ -69,7 +67,7 @@ public class Grid : MonoBehaviour
 
 		while(x<crystals)
 		{
-			if(grid [Random.Range (0,xSize/2),Random.Range (0,zSize/2)].GetComponent<Square>().generateCrystal())
+			if(grid [Random.Range (0,xSize-1),Random.Range (0,zSize/2)].GetComponent<Square>().generateCrystal())
 				x++;
 		}
 

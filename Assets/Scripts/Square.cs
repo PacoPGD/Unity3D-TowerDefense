@@ -12,14 +12,32 @@ public class Square : MonoBehaviour {
 
 
 	public GameObject crystal; //A crystal GameObject, represent a crystal
+	public GameObject blueCannonTurret; // blueCannonTurret GameObject, represent a Blue Cannon Turret
+
 
 	private bool isBuildable = true; //It indicates if the square is buildable
 	
 	private Status myStatus=Status.Free;
-	private int x; //x coordinate in the board
-	private int z; //z coordinate in the board
-	
-	void OnMouseEnter() {
+
+
+	void Start(){
+		if(myStatus!=Status.Generator)
+			gameObject.GetComponent<Renderer>().material.color = Color.white;
+		else
+			gameObject.GetComponent<Renderer>().material.color = Color.red;
+	}
+
+	void OnMouseDown() {
+		if (myStatus == Status.Free) {
+			blueCannonTurret = (GameObject)Instantiate (blueCannonTurret);
+			blueCannonTurret.transform.position += transform.position;
+			myStatus = Status.Tower;
+		}
+
+	}
+
+
+	void OnMouseOver() {
 		if(myStatus==Status.Free)
 			gameObject.GetComponent<Renderer>().material.color = Color.blue;
 		else
@@ -33,12 +51,7 @@ public class Square : MonoBehaviour {
 			gameObject.GetComponent<Renderer>().material.color = Color.red;
 	}
 
-	void Start(){
-		if(myStatus!=Status.Generator)
-			gameObject.GetComponent<Renderer>().material.color = Color.white;
-		else
-			gameObject.GetComponent<Renderer>().material.color = Color.red;
-	}
+
 
 	public bool generateCrystal(){
 		if (myStatus==Status.Free) {
@@ -55,19 +68,5 @@ public class Square : MonoBehaviour {
 	}
 
 
-	public int getX(){
-		return x;
-	}
-	
-	public void setX(int value){
-		x = value;
-	}
-	public int getZ(){
-		return z;
-	}
-	
-	public void setZ(int value){
-		z = value;
-	}
 
 }
