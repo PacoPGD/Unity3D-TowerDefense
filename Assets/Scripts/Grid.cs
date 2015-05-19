@@ -7,6 +7,7 @@ public class Grid : MonoBehaviour
 	public int xSize = 10;
 	public int zSize = 10;
 	public int crystals = 1;
+	public float enemyRate = 1;
 
 	private int width = 10; //width of a square
 	private int height = 10; //height of a square
@@ -67,7 +68,7 @@ public class Grid : MonoBehaviour
 
 		while(x<crystals)
 		{
-			if(grid [Random.Range (0,xSize-1),Random.Range (0,zSize/2)].GetComponent<Square>().generateCrystal())
+			if(grid [Random.Range (0,xSize-1),Random.Range (0,zSize/3)].GetComponent<Square>().generateCrystal())
 				x++;
 		}
 
@@ -78,6 +79,13 @@ public class Grid : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		for (int x = 0; x < xSize; x++) {
+			for (int z = 0; z < zSize; z++) {
+				if(Random.Range(0,1000)<enemyRate){
+					grid[x,z].GetComponent<Square>().generateEnemy();
+				}
 
+			}
+		}
 	}
 }
