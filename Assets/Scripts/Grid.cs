@@ -27,7 +27,8 @@ public class Grid : MonoBehaviour
 				gridPlane.transform.position = new Vector3(gridPlane.transform.position.x +x*width,
 					gridPlane.transform.position.y, gridPlane.transform.position.z + z*height);  
 				grid[x,z] = gridPlane;
-				grid [x,z].GetComponent<Square>().setPosition(new Vector2(x,z));
+				grid [x,z].GetComponent<Square>().setX(x);
+				grid [x,z].GetComponent<Square>().setZ(z);
 				if(z==zSize-1)
 					grid [x,z].GetComponent<Square>().setGenerator();
 			}
@@ -99,4 +100,18 @@ public class Grid : MonoBehaviour
 
 		return boardStatus;
 	}
+}
+
+public class gridStatus{
+	public enum Status
+	{
+		Crystal, //It indicates the square have a crystal
+		Free,  //It indicates if the square is free
+		Tower, //It indicates the square have a tower
+		Generator, // It indicates the square generate enemies
+	};
+
+	public static Status myStatus;
+
+
 }
