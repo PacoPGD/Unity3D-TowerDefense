@@ -17,7 +17,7 @@ public class Square : MonoBehaviour {
 
 	private bool isBuildable = true; //It indicates if the square is buildable
 	private Status myStatus=Status.Free;
-
+	private Vector2 position;
 
 	void Start(){
 		if(myStatus!=Status.Generator)
@@ -83,5 +83,12 @@ public class Square : MonoBehaviour {
 			return 2;
 	}
 
-	
+	public void setPosition(Vector2 value){
+		position = value;
+	}
+
+	void OnTriggerStay(Collider other){
+			Debug.Log ("exito");
+	}
+
 }

@@ -27,14 +27,13 @@ public class Grid : MonoBehaviour
 				gridPlane.transform.position = new Vector3(gridPlane.transform.position.x +x*width,
 					gridPlane.transform.position.y, gridPlane.transform.position.z + z*height);  
 				grid[x,z] = gridPlane;
-
+				grid [x,z].GetComponent<Square>().setPosition(new Vector2(x,z));
 				if(z==zSize-1)
 					grid [x,z].GetComponent<Square>().setGenerator();
 			}
 		}
 
 	}
-
 
 	void OnPostRender(){
 		for (int x=0; x<xSize; x++){
