@@ -88,4 +88,16 @@ public class Grid : MonoBehaviour
 			}
 		}
 	}
+
+	public int [,] setBoardStatus(){
+		int [,] boardStatus;
+		boardStatus = new int[xSize, zSize];
+		for (int x = 0; x < xSize; x++) {
+			for (int z = 0; z < zSize; z++) {
+				boardStatus[x,z]=grid[x,z].GetComponent<Square>().setStatus();
+			}
+		}
+
+		return boardStatus;
+	}
 }

@@ -4,11 +4,10 @@ using System.Collections;
 public class Square : MonoBehaviour {
 	enum Status
 	{
-		Free,  //It indicates if the square is free
 		Crystal, //It indicates the square have a crystal
+		Free,  //It indicates if the square is free
 		Tower, //It indicates the square have a tower
 		Generator, // It indicates the square generate enemies
-		Enemy, // Indicates that is occupied by an enemy
 	};
 
 
@@ -17,7 +16,6 @@ public class Square : MonoBehaviour {
 	public GameObject enemyNormal; // enemyNormal GameObject, represent a Normal Enemy
 
 	private bool isBuildable = true; //It indicates if the square is buildable
-	
 	private Status myStatus=Status.Free;
 
 
@@ -33,6 +31,7 @@ public class Square : MonoBehaviour {
 			blueCannonTurret = (GameObject)Instantiate (blueCannonTurret);
 			blueCannonTurret.transform.position += transform.position;
 			myStatus = Status.Tower;
+			Enemy.routeCalculation();
 		}
 
 	}
@@ -46,10 +45,10 @@ public class Square : MonoBehaviour {
 	}
 
 	void OnMouseExit() {
-		if(myStatus!=Status.Generator)
-			gameObject.GetComponent<Renderer>().material.color = Color.white;
-		else
+		if(myStatus==Status.Generator)
 			gameObject.GetComponent<Renderer>().material.color = Color.red;
+		else
+			gameObject.GetComponent<Renderer>().material.color = Color.white;
 	}
 
 
@@ -67,7 +66,7 @@ public class Square : MonoBehaviour {
 	public void generateEnemy(){
 		if (myStatus == Status.Generator) {
 			enemyNormal = (GameObject)Instantiate (enemyNormal);
-			enemyNormal.transform.position += transform.position;
+			enemyNormal.transform.position = transform.position;
 		}
 	}
 
@@ -75,6 +74,14 @@ public class Square : MonoBehaviour {
 		myStatus = Status.Generator;
 	}
 
+	public int setStatus(){
+		if (myStatus == Status.Crystal)
+			return 0;
+		else if (myStatus == Status.Free)
+			return 1;
+		else
+			return 2;
+	}
 
-
+	
 }
