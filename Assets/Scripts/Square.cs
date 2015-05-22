@@ -16,20 +16,19 @@ public class Square : MonoBehaviour {
 	public GameObject enemyNormal; // enemyNormal GameObject, represent a Normal Enemy
 
 	private bool isBuildable = true; //It indicates if the square is buildable
-	private Status myStatus=Status.Free;
-
+	private Status myStatus = Status.Free;
 	private int x;
 	private int z;
-
+	
 	void Start(){
-		if(myStatus!=Status.Generator)
+		if(gridStatus.myStatus[x,z]!=gridStatus.Status.Generator)
 			gameObject.GetComponent<Renderer>().material.color = Color.white;
 		else
 			gameObject.GetComponent<Renderer>().material.color = Color.red;
 	}
 
 	void OnMouseDown() {
-		if (myStatus == Status.Free) {
+		if (gridStatus.myStatus[x,z] == gridStatus.Status.Free) {
 			blueCannonTurret = (GameObject)Instantiate (blueCannonTurret);
 			blueCannonTurret.transform.position += transform.position;
 			myStatus = Status.Tower;
@@ -40,14 +39,14 @@ public class Square : MonoBehaviour {
 
 
 	void OnMouseOver() {
-		if(myStatus==Status.Free)
+		if(gridStatus.myStatus[x,z]==gridStatus.Status.Free)
 			gameObject.GetComponent<Renderer>().material.color = Color.blue;
 		else
 			gameObject.GetComponent<Renderer>().material.color = Color.red;
 	}
 
 	void OnMouseExit() {
-		if(myStatus==Status.Generator)
+		if(gridStatus.myStatus[x,z]==gridStatus.Status.Generator)
 			gameObject.GetComponent<Renderer>().material.color = Color.red;
 		else
 			gameObject.GetComponent<Renderer>().material.color = Color.white;
@@ -56,7 +55,7 @@ public class Square : MonoBehaviour {
 
 
 	public bool generateCrystal(){
-		if (myStatus==Status.Free) {
+		if (gridStatus.myStatus[x,z]==gridStatus.Status.Free) {
 			crystal = (GameObject)Instantiate (crystal);
 			crystal.transform.position += transform.position;
 			myStatus=Status.Crystal;
@@ -66,24 +65,12 @@ public class Square : MonoBehaviour {
 	}
 
 	public void generateEnemy(){
-		if (myStatus == Status.Generator) {
+		if (gridStatus.myStatus[x,z] == gridStatus.Status.Generator) {
 			enemyNormal = (GameObject)Instantiate (enemyNormal);
 			enemyNormal.transform.position = transform.position;
 		}
 	}
 
-	public void setGenerator(){
-		myStatus = Status.Generator;
-	}
-
-	public int setStatus(){
-		if (myStatus == Status.Crystal)
-			return 0;
-		else if (myStatus == Status.Free)
-			return 1;
-		else
-			return 2;
-	}
 
 	public void setX(int value){
 		x = value;

@@ -19,18 +19,23 @@ public class Grid : MonoBehaviour
 	{
 		grid = new GameObject[xSize,zSize];
 
+		gridStatus.myStatus = new gridStatus.Status[xSize, zSize];
+
 		for (int x = 0; x < xSize; x++) 
 		{
 			for(int z = 0; z < zSize; z++)
 			{
+				gridStatus.myStatus[x,z]=gridStatus.Status.Free;
+
 				GameObject gridPlane = (GameObject)Instantiate (square);
 				gridPlane.transform.position = new Vector3(gridPlane.transform.position.x +x*width,
 					gridPlane.transform.position.y, gridPlane.transform.position.z + z*height);  
 				grid[x,z] = gridPlane;
 				grid [x,z].GetComponent<Square>().setX(x);
 				grid [x,z].GetComponent<Square>().setZ(z);
+
 				if(z==zSize-1)
-					grid [x,z].GetComponent<Square>().setGenerator();
+					gridStatus.myStatus[x,z]=gridStatus.Status.Generator;
 			}
 		}
 
@@ -88,18 +93,7 @@ public class Grid : MonoBehaviour
 			}
 		}
 	}
-
-	public int [,] setBoardStatus(){
-		int [,] boardStatus;
-		boardStatus = new int[xSize, zSize];
-		for (int x = 0; x < xSize; x++) {
-			for (int z = 0; z < zSize; z++) {
-				boardStatus[x,z]=grid[x,z].GetComponent<Square>().setStatus();
-			}
-		}
-
-		return boardStatus;
-	}
+	
 }
 
 public class gridStatus{
@@ -111,7 +105,7 @@ public class gridStatus{
 		Generator, // It indicates the square generate enemies
 	};
 
-	public static Status myStatus;
+	public static Status [,] myStatus;
 
 
 }
