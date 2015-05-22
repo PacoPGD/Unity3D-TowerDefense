@@ -20,6 +20,8 @@ public class Grid : MonoBehaviour
 		grid = new GameObject[xSize,zSize];
 
 		gridStatus.myStatus = new gridStatus.Status[xSize, zSize];
+		gridStatus.xSize = xSize;
+		gridStatus.zSize = zSize;
 
 		for (int x = 0; x < xSize; x++) 
 		{
@@ -69,6 +71,7 @@ public class Grid : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
+		grid[9,9].GetComponent<Square>().generateEnemy();
 		int x = 0;
 
 		while(x<crystals)
@@ -84,6 +87,7 @@ public class Grid : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
+		/*
 		for (int x = 0; x < xSize; x++) {
 			for (int z = 0; z < zSize; z++) {
 				if(Random.Range(0,1000)<enemyRate){
@@ -91,7 +95,7 @@ public class Grid : MonoBehaviour
 				}
 
 			}
-		}
+		}*/
 	}
 	
 }
@@ -106,6 +110,9 @@ public class gridStatus{
 	};
 
 	public static Status [,] myStatus;
+
+	public static int xSize;
+	public static int zSize;
 
 
 }

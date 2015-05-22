@@ -15,8 +15,6 @@ public class Square : MonoBehaviour {
 	public GameObject blueCannonTurret; // blueCannonTurret GameObject, represent a Blue Cannon Turret
 	public GameObject enemyNormal; // enemyNormal GameObject, represent a Normal Enemy
 
-	private bool isBuildable = true; //It indicates if the square is buildable
-	private Status myStatus = Status.Free;
 	private int x;
 	private int z;
 	
@@ -31,8 +29,7 @@ public class Square : MonoBehaviour {
 		if (gridStatus.myStatus[x,z] == gridStatus.Status.Free) {
 			blueCannonTurret = (GameObject)Instantiate (blueCannonTurret);
 			blueCannonTurret.transform.position += transform.position;
-			myStatus = Status.Tower;
-			Enemy.routeCalculation();
+			gridStatus.myStatus[x,z] = gridStatus.Status.Tower;
 		}
 
 	}
@@ -58,7 +55,7 @@ public class Square : MonoBehaviour {
 		if (gridStatus.myStatus[x,z]==gridStatus.Status.Free) {
 			crystal = (GameObject)Instantiate (crystal);
 			crystal.transform.position += transform.position;
-			myStatus=Status.Crystal;
+			gridStatus.myStatus[x,z]=gridStatus.Status.Crystal;
 			return true;
 		} else
 			return false;
@@ -80,8 +77,9 @@ public class Square : MonoBehaviour {
 		z = value;
 	}
 
-	void OnTriggerStay(Collider other){
-			Debug.Log ("exito");
+	void OnTriggerEnter(Collider other){
+		other.gameObject.GetComponent<Enemy>().setX (x);
+		other.gameObject.GetComponent<Enemy>().setZ (z);
 	}
 
 }
