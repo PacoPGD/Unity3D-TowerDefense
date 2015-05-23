@@ -19,25 +19,25 @@ public class Grid : MonoBehaviour
 	{
 		grid = new GameObject[xSize,zSize];
 
+<<<<<<< HEAD
 		gridStatus.myStatus = new gridStatus.Status[xSize, zSize];
 		gridStatus.xSize = xSize;
 		gridStatus.zSize = zSize;
 
+=======
+>>>>>>> parent of 8ca0939... Static boardStatus added
 		for (int x = 0; x < xSize; x++) 
 		{
 			for(int z = 0; z < zSize; z++)
 			{
-				gridStatus.myStatus[x,z]=gridStatus.Status.Free;
-
 				GameObject gridPlane = (GameObject)Instantiate (square);
 				gridPlane.transform.position = new Vector3(gridPlane.transform.position.x +x*width,
 					gridPlane.transform.position.y, gridPlane.transform.position.z + z*height);  
 				grid[x,z] = gridPlane;
 				grid [x,z].GetComponent<Square>().setX(x);
 				grid [x,z].GetComponent<Square>().setZ(z);
-
 				if(z==zSize-1)
-					gridStatus.myStatus[x,z]=gridStatus.Status.Generator;
+					grid [x,z].GetComponent<Square>().setGenerator();
 			}
 		}
 
@@ -96,6 +96,36 @@ public class Grid : MonoBehaviour
 				}
 		}*/
 	}
-	
+
+	public int [,] setBoardStatus(){
+		int [,] boardStatus;
+		boardStatus = new int[xSize, zSize];
+		for (int x = 0; x < xSize; x++) {
+			for (int z = 0; z < zSize; z++) {
+				boardStatus[x,z]=grid[x,z].GetComponent<Square>().setStatus();
+			}
+		}
+
+		return boardStatus;
+	}
 }
 
+<<<<<<< HEAD
+=======
+public class gridStatus{
+	public enum Status
+	{
+		Crystal, //It indicates the square have a crystal
+		Free,  //It indicates if the square is free
+		Tower, //It indicates the square have a tower
+		Generator, // It indicates the square generate enemies
+	};
+
+	public static Status myStatus;
+
+	public static int xSize;
+	public static int zSize;
+
+
+}
+>>>>>>> origin/master
