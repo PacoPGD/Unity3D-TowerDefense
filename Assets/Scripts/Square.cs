@@ -77,8 +77,10 @@ public class Square : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider other){
-		other.gameObject.GetComponent<Enemy>().setX (x);
-		other.gameObject.GetComponent<Enemy>().setZ (z);
+		if (other.gameObject.GetComponent<Enemy> ()) {
+			other.gameObject.GetComponent<Enemy> ().setX (x);
+			other.gameObject.GetComponent<Enemy> ().setZ (z);
+		}
 	}
 
 }

@@ -81,7 +81,7 @@ public class Grid : MonoBehaviour
 
 
 		grid[19,19].GetComponent<Square>().generateEnemy();
-		grid[10,19].GetComponent<Square>().generateEnemy();
+		//grid[10,19].GetComponent<Square>().generateEnemy();
 		
 		
 	}

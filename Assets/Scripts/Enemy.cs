@@ -23,7 +23,8 @@ public class Enemy : MonoBehaviour {
 	
 	List<int> routeX = new List<int>();//X coordinate in the board of destiny
 	List<int> routeZ = new List<int>();//Z coordinate in the board of destiny
-	
+
+
 	// Use this for initialization
 	void Start () {
 		life = maxLife;
@@ -34,20 +35,30 @@ public class Enemy : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (!myGridStatus.compareStatus()) {
-			myGridStatus.copyStatus();
-			routeCalculation();
-		}
-
 		move ();
+		/*
+		if (!myGridStatus.compareStatus ()) {
+			//myGridStatus.copyStatus ();
+			//cleanRoute ();
+			//routeCalculation ();
+			Debug.Log("prueba");
+
+		} 
+		else {
+			move ();
+		}
+		*/
+		
 	}
+
+
 
 	//BFS ALGORITHM
 	public void routeCalculation(){
 		Node [,] myNode;
 		List<Node> tail = new List<Node>();
 		Node checking;
-
+		
 		myNode = new Node[gridStatus.xSize, gridStatus.zSize];
 
 		for (int i=0; i<gridStatus.xSize; i++) {
@@ -97,6 +108,11 @@ public class Enemy : MonoBehaviour {
 
 	}
 
+	public void cleanRoute() {
+		routeX = new List<int>();
+		routeZ = new List<int>();
+	}
+
 	public void writeRoute(Node destiny){
 		Node aux;
 		aux = destiny;
@@ -109,6 +125,8 @@ public class Enemy : MonoBehaviour {
 
 		routeX.Reverse ();
 		routeZ.Reverse ();
+
+
 	}
 
 
@@ -136,6 +154,11 @@ public class Enemy : MonoBehaviour {
 
 	}
 	
+	//BATTLE
+	public void ApplyDamage(int damage){
+		life = life - damage;
+	}
+
 
 	//AUXILIARS
 	public void setX(int value){
