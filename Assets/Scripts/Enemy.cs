@@ -5,12 +5,13 @@ using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 
-	public float velocity=0.1f;
+	public float velocity;
 
-	public int maxLife = 10;
+	public int maxLife;
 
-	public int life;
-	
+	private int life;
+
+	private gridStatus myGridStatus = new gridStatus();
 
 	private static int GOAL = 0;
 	private static int FREE = 1;
@@ -25,15 +26,19 @@ public class Enemy : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start () {
-
 		life = maxLife;
-
+		myGridStatus.copyStatus ();
 		routeCalculation ();
 
 	}
 
 	// Update is called once per frame
 	void Update () {
+		if (!myGridStatus.compareStatus()) {
+			myGridStatus.copyStatus();
+			routeCalculation();
+		}
+
 		move ();
 	}
 
@@ -47,9 +52,9 @@ public class Enemy : MonoBehaviour {
 
 		for (int i=0; i<gridStatus.xSize; i++) {
 			for(int j=0; j<gridStatus.zSize; j++){
-				if(gridStatus.myStatus[i,j]==gridStatus.Status.Crystal)
+				if(myGridStatus.personalStatus[i,j]==gridStatus.Status.Crystal)
 					myNode[i,j] = new Node(GOAL,i,j);
-				else if(gridStatus.myStatus[i,j]==gridStatus.Status.Free)
+				else if(myGridStatus.personalStatus[i,j]==gridStatus.Status.Free)
 					myNode[i,j] = new Node(FREE,i,j);
 				else
 					myNode[i,j] = new Node(BLOCK,i,j);
@@ -80,7 +85,7 @@ public class Enemy : MonoBehaviour {
 							myNode[checking.x+i,checking.z+j].distance=checking.distance+1;
 							myNode[checking.x+i,checking.z+j].previous = checking;
 							tail.Clear ();
-							//Debug.Log ("SUCCESS"+(checking.x+i)+" "+(checking.z+j)  );
+
 							writeRoute (myNode[checking.x+i,checking.z+j]);
 						}
 					}
@@ -106,6 +111,7 @@ public class Enemy : MonoBehaviour {
 		routeZ.Reverse ();
 	}
 
+
 	//MOVING
 	public void move(){
 		if (routeX.Count != 0) {
@@ -120,13 +126,13 @@ public class Enemy : MonoBehaviour {
 
 	public void goSquare(int squareX, int squareZ){
 		if (x < squareX)
-			transform.position += new Vector3 (1, 0, 0);
+			transform.position += new Vector3 (velocity, 0, 0);
 		if (x > squareX)
-			transform.position -= new Vector3 (1, 0, 0);
+			transform.position -= new Vector3 (velocity, 0, 0);
 		if (z < squareZ)
-			transform.position += new Vector3 (0, 0, 1);
+			transform.position += new Vector3 (0, 0, velocity);
 		if (z > squareZ)
-			transform.position -= new Vector3 (0, 0, 1);
+			transform.position -= new Vector3 (0, 0, velocity);
 
 	}
 	
