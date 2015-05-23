@@ -53,7 +53,6 @@ public class Turret : MonoBehaviour {
 
 	void FireProjectile()
 	{
-		//audio.Play();
 		nextFireTime = Time.time + reloadTime;
 
 		projectile = (GameObject)Instantiate (projectile);

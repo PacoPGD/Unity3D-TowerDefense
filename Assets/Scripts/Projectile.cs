@@ -26,13 +26,9 @@ public class Projectile : MonoBehaviour {
 	
 	void OnTriggerEnter(Collider other){
 	
-		if (other.tag == "Enemy")
+		if(other.gameObject.GetComponent<Enemy>())
 		{
-			Enemy enemy;
-			enemy = other.gameObject.GetComponent<Enemy>();
-			
-			enemy.ApplyDamage(damage);
-			
+			other.gameObject.GetComponent<Enemy>().ApplyDamage(damage);
 			Destroy(gameObject);
 		}
 	}

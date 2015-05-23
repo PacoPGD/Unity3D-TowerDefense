@@ -9,6 +9,11 @@ public class Enemy : MonoBehaviour {
 
 	public int maxLife;
 
+	public GameObject lifePortion;
+
+	private GameObject [] lifeBar;
+	
+
 	private int life;
 
 	private gridStatus myGridStatus = new gridStatus();
@@ -25,9 +30,13 @@ public class Enemy : MonoBehaviour {
 	List<int> routeZ = new List<int>();//Z coordinate in the board of destiny
 
 
+
+
 	// Use this for initialization
 	void Start () {
 		life = maxLife;
+		lifeBar = new GameObject[maxLife];
+		initLifeBar ();
 		myGridStatus.copyStatus ();
 		routeCalculation ();
 
@@ -35,6 +44,7 @@ public class Enemy : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+		paintLife ();
 		move ();
 		/*
 		if (!myGridStatus.compareStatus ()) {
@@ -50,7 +60,6 @@ public class Enemy : MonoBehaviour {
 		*/
 		
 	}
-
 
 
 	//BFS ALGORITHM
@@ -158,6 +167,22 @@ public class Enemy : MonoBehaviour {
 	public void ApplyDamage(int damage){
 		life = life - damage;
 	}
+
+	//LIFEBAR
+	public void initLifeBar(){
+		for (int i=0; i<maxLife; i++) {
+			lifeBar[i] = (GameObject)Instantiate(lifePortion);
+			lifeBar[i].GetComponent<Renderer>().material.color = Color.red;
+			lifeBar[i].transform.position = (transform.position+ new Vector3(i-5,5,0));
+		}
+	}
+
+	public void paintLife(){
+		for (int i=0; i<life; i++) {
+			lifeBar[i].transform.position = (transform.position+ new Vector3(i-5,5,0));
+		}
+	}
+	
 
 
 	//AUXILIARS
