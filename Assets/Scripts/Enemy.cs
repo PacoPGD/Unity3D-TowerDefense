@@ -5,13 +5,12 @@ using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 
-	public float velocity=0.2f;
+	public float velocity=0.1f;
 
 	public int maxLife = 10;
 
 	public int life;
-
-	public int [,] myBoardStatus;
+	
 
 	private static int GOAL = 0;
 	private static int FREE = 1;
@@ -20,43 +19,53 @@ public class Enemy : MonoBehaviour {
 
 	private int x; //X coordinate in the board of this enemy
 	private int z; //Z coordinate in the board of this enemy
-
-	private Node [,] myNode;
-
+	
+	List<int> routeX = new List<int>();//X coordinate in the board of destiny
+	List<int> routeZ = new List<int>();//Z coordinate in the board of destiny
+	
 	// Use this for initialization
 	void Start () {
+
 		life = maxLife;
 
-		myBoardStatus = new int[gridStatus.xSize, gridStatus.zSize];
-		myNode = new Node[gridStatus.xSize, gridStatus.zSize];
-		loadBoardStatus ();
 		routeCalculation ();
 
 	}
 
 	// Update is called once per frame
 	void Update () {
-		goSquare (2, 2);
+		move ();
 	}
 
+	//BFS ALGORITHM
 	public void routeCalculation(){
+		Node [,] myNode;
 		List<Node> tail = new List<Node>();
 		Node checking;
 
-		for (int i =0; i<gridStatus.xSize; i++) {
-			for(int j=0; j<gridStatus.zSize;j++){
-				myNode[i,j] = new Node(FREE,i,j);
+		myNode = new Node[gridStatus.xSize, gridStatus.zSize];
+
+		for (int i=0; i<gridStatus.xSize; i++) {
+			for(int j=0; j<gridStatus.zSize; j++){
+				if(gridStatus.myStatus[i,j]==gridStatus.Status.Crystal)
+					myNode[i,j] = new Node(GOAL,i,j);
+				else if(gridStatus.myStatus[i,j]==gridStatus.Status.Free)
+					myNode[i,j] = new Node(FREE,i,j);
+				else
+					myNode[i,j] = new Node(BLOCK,i,j);
 			}
 		}
-
+		
+		
 		//Add the father element 
 		tail.Add (myNode [x, z]);
-		myNode [x, z].myStatus = CHECKED;
+
 
 		while (tail.Count!=0) {
 			checking = tail[0];
 			tail.RemoveAt (0);
-			//Debug.Log ("Checking "+ (checking.x) +" "+(checking.z));
+
+			//Debug.Log ("CHECKING "+ checking.x +" "+ checking.z);
 
 			for(int i=-1;i<=1;i++){
 				for(int j=-1;j<=1;j++){
@@ -66,8 +75,13 @@ public class Enemy : MonoBehaviour {
 							myNode[checking.x+i,checking.z+j].distance=checking.distance+1;
 							myNode[checking.x+i,checking.z+j].previous = checking;
 							tail.Add (myNode[checking.x+i,checking.z+j]);
-							
-							//Debug.Log ("Add "+ (checking.x+i) +" "+(checking.z+j));
+						}
+						else if (myNode[checking.x+i,checking.z+j].myStatus==GOAL){
+							myNode[checking.x+i,checking.z+j].distance=checking.distance+1;
+							myNode[checking.x+i,checking.z+j].previous = checking;
+							tail.Clear ();
+							//Debug.Log ("SUCCESS"+(checking.x+i)+" "+(checking.z+j)  );
+							writeRoute (myNode[checking.x+i,checking.z+j]);
 						}
 					}
 				}
@@ -77,43 +91,47 @@ public class Enemy : MonoBehaviour {
 
 
 	}
-	
 
-	public bool inBoard(int x, int z){
-		if (z >= 0 && z < gridStatus.zSize && x >= 0 && x < gridStatus.xSize) 
-			return true;
-	    else
-			return false;
+	public void writeRoute(Node destiny){
+		Node aux;
+		aux = destiny;
+
+		while (aux.previous!=null) {
+			routeX.Add (aux.x);
+			routeZ.Add (aux.z);
+			aux = aux.previous;
+		}
+
+		routeX.Reverse ();
+		routeZ.Reverse ();
 	}
 
+	//MOVING
+	public void move(){
+		if (routeX.Count != 0) {
+			goSquare (routeX [0], routeZ [0]);
+
+			if (x == routeX [0] && z == routeZ [0]) {
+				routeX.RemoveAt (0);
+				routeZ.RemoveAt (0);
+			}
+		} 
+	}
 
 	public void goSquare(int squareX, int squareZ){
 		if (x < squareX)
-			transform.position += new Vector3 (velocity, 0, 0);
+			transform.position += new Vector3 (1, 0, 0);
 		if (x > squareX)
-			transform.position -= new Vector3 (velocity, 0, 0);
+			transform.position -= new Vector3 (1, 0, 0);
 		if (z < squareZ)
-			transform.position += new Vector3 (0, 0, velocity);
+			transform.position += new Vector3 (0, 0, 1);
 		if (z > squareZ)
-			transform.position -= new Vector3 (0, 0, velocity);
+			transform.position -= new Vector3 (0, 0, 1);
+
 	}
+	
 
-
-	public void loadBoardStatus(){
-		for (int i=0; i<gridStatus.xSize; i++) {
-			for(int j=0; j<gridStatus.zSize; j++){
-				if(gridStatus.myStatus[i,j]==gridStatus.Status.Crystal)
-					myBoardStatus[i,j]=GOAL;
-				else if(gridStatus.myStatus[i,j]==gridStatus.Status.Free)
-					myBoardStatus[i,j]=FREE;
-				else
-					myBoardStatus[i,j]=BLOCK;
-			}
-		}
-	}
-
-
-
+	//AUXILIARS
 	public void setX(int value){
 		x = value;
 	}
@@ -122,4 +140,10 @@ public class Enemy : MonoBehaviour {
 		z = value;
 	}
 
+	public bool inBoard(int x, int z){
+		if (z >= 0 && z < gridStatus.zSize && x >= 0 && x < gridStatus.xSize) 
+			return true;
+		else
+			return false;
+	}
 }
