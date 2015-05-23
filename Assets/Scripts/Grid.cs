@@ -71,7 +71,7 @@ public class Grid : MonoBehaviour
 	// Use this for initialization
 	void Start () 
 	{
-		grid[9,9].GetComponent<Square>().generateEnemy();
+		grid[4,4].GetComponent<Square>().generateEnemy();
 		int x = 0;
 
 		while(x<crystals)

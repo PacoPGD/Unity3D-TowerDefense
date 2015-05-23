@@ -4,7 +4,8 @@ using System.Collections.Generic;
 
 public class Node {
 
-	public Enemy myEnemy;
+	
+	public int [,] myBoardStatus;
 
 	public int x; //X coordinate in the board of this enemy
 	public int z; //Z coordinate in the board of this enemy
@@ -17,60 +18,66 @@ public class Node {
 	private static int FINALIZED= 3;
 	//private static int BLOCK= 4;
 
-	public Node(Enemy value){
-		myEnemy = value;
+	public Node(){
 	}
 
-	public Node(Enemy value,int valueX, int valueZ){
-		myEnemy = value;
+	public Node(int valueX, int valueZ){
 		x = valueX;
 		z = valueZ;
 	}
 
-	public void findNeighbors(){
+	public void findNeighbors(int [,] value){
+		myBoardStatus = value;
+
 		if (getNodeStatus () == GOAL) {
-			Debug.Log ("exito");
+			Debug.Log ("success");
 		} 
 
 		else {
-			setNodeStatus (CHECKED);
-			Debug.Log ("Chequeado " + (x) + " " + (z));
-			if(previous==null){
-				if(!addNextNode ()){
-					setNodeStatus (FINALIZED);
-					for (int i=0; i<next.Count; i++) {
-						next [i].findNeighbors ();
-					}	
-				}
+			if(previous != null && getNodeStatus()==FINALIZED){
+
 			}
 			else{
-				if (previous.getNodeStatus () != FINALIZED) {
-					previous.findNeighbors ();
-				} 
-				else {
+				setNodeStatus (CHECKED);
+				Debug.Log ("check " + (x) + " " + (z));
+				if(previous==null){
 					if(!addNextNode ()){
+						Debug.Log ("finish " + (x) + " " + (z));
 						setNodeStatus (FINALIZED);
 						for (int i=0; i<next.Count; i++) {
-							next [i].findNeighbors ();
+							next [i].findNeighbors (myBoardStatus);
 						}	
 					}
 				}
+				else{
+					if (previous.getNodeStatus () != FINALIZED) {
+						previous.findNeighbors (myBoardStatus);
+					} 
+					else {
+						if(!addNextNode ()){
+							Debug.Log ("finish " + (x) + " " + (z));
+							setNodeStatus (FINALIZED);
+							for (int i=0; i<next.Count; i++) {
+								next [i].findNeighbors (myBoardStatus);
+							}	
+						}
+					}
+				}
 			}
-
 
 		}
 	}
 
 	public bool addNextNode(){
 		Node aux;
-		for(int i=-1;i<=+1;i++){
-			for(int j=-1;j<=+1;j++){
+		for(int i=-1;i<=1;i++){
+			for(int j=-1;j<=1;j++){
 				if(inBoard (x+i,z+j)){
-					if (myEnemy.myBoardStatus [x+i,z+j] == FREE) {
-						aux = new Node (myEnemy, x+i, z+j);
+					if (myBoardStatus [x+i,z+j] == FREE) {
+						aux = new Node (x+i, z+j);
 						next.Add (aux);
 						aux.previous = this;
-						aux.findNeighbors ();
+						aux.findNeighbors (myBoardStatus);
 						return true;
 					}
 				}
@@ -78,62 +85,18 @@ public class Node {
 		}
 
 		return false;
-		/*
-		if (z - 1 >= 0) {
-			if (myEnemy.myBoardStatus [x, z - 1] == FREE) {
-				
-				Debug.Log ("Añado nodo " + x + " " + (z-1));
-				aux = new Node (myEnemy, x, z - 1);
-				next.Add (aux);
-				aux.previous = this;
-				aux.findNeighbors ();
-				return true;
-			}
-		} 
-		else if (z + 1 < gridStatus.zSize) {
-			if (myEnemy.myBoardStatus [x, z + 1] == FREE) {
-				Debug.Log ("Añado nodo " + x + " " + (z+1));
-				aux = new Node (myEnemy, x, z + 1);
-				next.Add (aux);
-				aux.previous = this;
-				aux.findNeighbors ();
-				return true;
-			}
-		} 
-		else if (x - 1 >= 0) {
-			if (myEnemy.myBoardStatus [x - 1, z] == FREE) {
-				Debug.Log ("Añado nodo " + (x-1) + " " + z);
-				aux = new Node (myEnemy, x - 1, z);
-				next.Add (aux);
-				aux.previous = this;
-				aux.findNeighbors ();
-				return true;
-			}
-		} 
-		else if (x + 1 < gridStatus.xSize) {
-			if (myEnemy.myBoardStatus [x + 1, z] == FREE) {
-				Debug.Log ("Añado nodo " + (x+1) + " " + z);
-				aux = new Node (myEnemy, x + 1, z);
-				next.Add (aux);
-				aux.previous = this;
-				aux.findNeighbors ();
-				return true;
-			}
-		} 
-		return false;*/
-
 	}
 	
 	public void setNodeStatus(int value){
-		myEnemy.myBoardStatus[x,z] = value;
+		myBoardStatus[x,z] = value;
 	}
 
 	public int getNodeStatus(){
-		return myEnemy.myBoardStatus[x,z];
+		return myBoardStatus[x,z];
 	}
 
 	public bool inBoard(int x, int z){
-		if (z - 1 >= 0 && z + 1 < gridStatus.zSize && x - 1 >= 0 && x + 1 < gridStatus.xSize) {
+		if (z  >= 0 && z  < gridStatus.zSize && x >= 0 && x  < gridStatus.xSize) {
 			return true;
 		} else {
 			return false;

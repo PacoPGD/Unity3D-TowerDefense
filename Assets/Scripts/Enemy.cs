@@ -27,24 +27,23 @@ public class Enemy : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		life = maxLife;
-		myNode = new Node(this);
+		myNode = new Node();
 		myBoardStatus = new int[gridStatus.xSize, gridStatus.zSize];
 		loadBoardStatus ();
-		//logBoardStatus ();
 		routeCalculation ();
-		//logBoardStatus ();
+
 	}
 
 	// Update is called once per frame
 	void Update () {
-		goSquare (5, 5);
+		goSquare (2, 2);
 	}
 
 	public void routeCalculation(){
 		myNode.x = x;
 		myNode.z = z;
 
-		myNode.findNeighbors ();
+		myNode.findNeighbors (myBoardStatus);
 
 	}
 	
