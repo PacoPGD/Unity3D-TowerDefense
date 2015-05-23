@@ -28,56 +28,102 @@ public class Node {
 	}
 
 	public void findNeighbors(){
-		Node aux;
-
-		Debug.Log ("Comprobado nodo " + x + " " + z);
 		if (getNodeStatus () == GOAL) {
 			Debug.Log ("exito");
-		} else {
+		} 
+
+		else {
 			setNodeStatus (CHECKED);
-			if (previous != null || previous.getNodeStatus () != FINALIZED) {
-				previous.findNeighbors ();
-			} 
-			else {
-				if (z - 1 >= 0) {
-					if (myEnemy.myBoardStatus [x, z - 1] == FREE) {
-						aux = new Node (myEnemy, x, z - 1);
-						next.Add (aux);
-						aux.previous = this;
-						aux.findNeighbors ();
-					}
-				} else if (z + 1 < gridStatus.zSize) {
-					if (myEnemy.myBoardStatus [x, z + 1] == FREE) {
-						aux = new Node (myEnemy, x, z + 1);
-						next.Add (aux);
-						aux.previous = this;
-						aux.findNeighbors ();
-					}
-				} else if (x - 1 >= 0) {
-					if (myEnemy.myBoardStatus [x - 1, z] == FREE) {
-						aux = new Node (myEnemy, x - 1, z);
-						next.Add (aux);
-						aux.previous = this;
-						aux.findNeighbors ();
-					}
-				} else if (x + 1 < gridStatus.xSize) {
-					if (myEnemy.myBoardStatus [x + 1, z] == FREE) {
-						aux = new Node (myEnemy, x + 1, z);
-						next.Add (aux);
-						aux.previous = this;
-						aux.findNeighbors ();
-					}
-				} else {
+			Debug.Log ("Chequeado " + (x) + " " + (z));
+			if(previous==null){
+				if(!addNextNode ()){
 					setNodeStatus (FINALIZED);
 					for (int i=0; i<next.Count; i++) {
 						next [i].findNeighbors ();
 					}	
 				}
 			}
+			else{
+				if (previous.getNodeStatus () != FINALIZED) {
+					previous.findNeighbors ();
+				} 
+				else {
+					if(!addNextNode ()){
+						setNodeStatus (FINALIZED);
+						for (int i=0; i<next.Count; i++) {
+							next [i].findNeighbors ();
+						}	
+					}
+				}
+			}
+
+
 		}
 	}
 
+	public bool addNextNode(){
+		Node aux;
+		for(int i=-1;i<=+1;i++){
+			for(int j=-1;j<=+1;j++){
+				if(inBoard (x+i,z+j)){
+					if (myEnemy.myBoardStatus [x+i,z+j] == FREE) {
+						aux = new Node (myEnemy, x+i, z+j);
+						next.Add (aux);
+						aux.previous = this;
+						aux.findNeighbors ();
+						return true;
+					}
+				}
+			}
+		}
 
+		return false;
+		/*
+		if (z - 1 >= 0) {
+			if (myEnemy.myBoardStatus [x, z - 1] == FREE) {
+				
+				Debug.Log ("Añado nodo " + x + " " + (z-1));
+				aux = new Node (myEnemy, x, z - 1);
+				next.Add (aux);
+				aux.previous = this;
+				aux.findNeighbors ();
+				return true;
+			}
+		} 
+		else if (z + 1 < gridStatus.zSize) {
+			if (myEnemy.myBoardStatus [x, z + 1] == FREE) {
+				Debug.Log ("Añado nodo " + x + " " + (z+1));
+				aux = new Node (myEnemy, x, z + 1);
+				next.Add (aux);
+				aux.previous = this;
+				aux.findNeighbors ();
+				return true;
+			}
+		} 
+		else if (x - 1 >= 0) {
+			if (myEnemy.myBoardStatus [x - 1, z] == FREE) {
+				Debug.Log ("Añado nodo " + (x-1) + " " + z);
+				aux = new Node (myEnemy, x - 1, z);
+				next.Add (aux);
+				aux.previous = this;
+				aux.findNeighbors ();
+				return true;
+			}
+		} 
+		else if (x + 1 < gridStatus.xSize) {
+			if (myEnemy.myBoardStatus [x + 1, z] == FREE) {
+				Debug.Log ("Añado nodo " + (x+1) + " " + z);
+				aux = new Node (myEnemy, x + 1, z);
+				next.Add (aux);
+				aux.previous = this;
+				aux.findNeighbors ();
+				return true;
+			}
+		} 
+		return false;*/
+
+	}
+	
 	public void setNodeStatus(int value){
 		myEnemy.myBoardStatus[x,z] = value;
 	}
@@ -86,33 +132,12 @@ public class Node {
 		return myEnemy.myBoardStatus[x,z];
 	}
 
-	/*
-	public void findNeighbors(){
-		Debug.Log ("Comprobado nodo "+x+" "+z);
-		if (myEnemy.myBoardStatus [x, z] == GOAL) {
-			Debug.Log ("exito");
-		} 
-		else {
-			myEnemy.myBoardStatus [x, z] = CHECKED;
-			if(z-1>=0)
-				if(myEnemy.myBoardStatus[x,z-1]==FREE)
-					next.Add (new Node(myEnemy,x,z-1));
-			if(z+1<gridStatus.zSize)
-				if(myEnemy.myBoardStatus[x,z+1]==FREE)
-					next.Add (new Node(myEnemy,x,z+1));
-			if(x-1>=0)
-				if(myEnemy.myBoardStatus[x-1,z]==FREE)
-					next.Add (new Node(myEnemy,x-1,z));
-			if(x+1<gridStatus.xSize)
-				if(myEnemy.myBoardStatus[x+1,z]==FREE)
-					next.Add (new Node(myEnemy,x+1,z));
-			
-			for (int i=0; i<next.Count; i++) {
-				next[i].previous=this;
-				next[i].findNeighbors();
-			}
+	public bool inBoard(int x, int z){
+		if (z - 1 >= 0 && z + 1 < gridStatus.zSize && x - 1 >= 0 && x + 1 < gridStatus.xSize) {
+			return true;
+		} else {
+			return false;
 		}
-
-	}*/
+	}
 
 }
