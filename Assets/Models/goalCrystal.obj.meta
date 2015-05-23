@@ -1,14 +1,14 @@
 fileFormatVersion: 2
-guid: 5455e5f1b3151154f8f2415f73e8e872
-timeCreated: 1432240471
+guid: d61a4472dbd5344438b29d55709f9159
+timeCreated: 1432239365
 licenseType: Free
 ModelImporter:
   serializedVersion: 18
   fileIDToRecycleName:
-    100000: //RootNode
-    100002: CrystalCrack
-    400000: //RootNode
-    400002: CrystalCrack
+    100000: CrystalCrack
+    100002: //RootNode
+    400000: CrystalCrack
+    400002: //RootNode
     2300000: CrystalCrack
     3300000: CrystalCrack
     4300000: CrystalCrack
