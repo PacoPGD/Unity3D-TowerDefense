@@ -80,7 +80,7 @@ public class Grid : MonoBehaviour
 		}
 
 
-		grid[xSize-1,zSize-1].GetComponent<Square>().generateEnemy();
+		//grid[xSize-1,zSize-1].GetComponent<Square>().generateEnemy();
 		//grid[10,19].GetComponent<Square>().generateEnemy();
 		
 		
@@ -89,12 +89,12 @@ public class Grid : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
 	{
-		/*
+
 		if (Time.time >= enemyTimeGenerate)
 		{
 			enemyTimeGenerate = Time.time+enemyTimeGenerate;
 			grid[Random.Range (0,xSize),zSize-1].GetComponent<Square>().generateEnemy();
-		}*/
+		}
 	}
 	
 }

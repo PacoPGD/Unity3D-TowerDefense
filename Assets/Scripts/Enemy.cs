@@ -29,7 +29,10 @@ public class Enemy : MonoBehaviour {
 	List<int> routeX = new List<int>();//X coordinate in the board of destiny
 	List<int> routeZ = new List<int>();//Z coordinate in the board of destiny
 
+	private static int CALCULATING = 0;
+	private static int MOVING = 1;
 
+	private int action=CALCULATING;
 
 
 	// Use this for initialization
@@ -38,43 +41,34 @@ public class Enemy : MonoBehaviour {
 		lifeBar = new GameObject[maxLife];
 		initLifeBar ();
 		myGridStatus.copyStatus ();
-		writeRoute(routeCalculation ());
+
 
 	}
 
 	// Update is called once per frame
 	void Update () {
+		if (action == CALCULATING) {
+			writeRoute (routeCalculation ());
+			action = MOVING;
+		} else {
+			move ();
+		}
+
 		paintLife ();
-		move ();
 		checkDie ();
 
-		/*
-		if (!myGridStatus.compareStatus ()) {
-			//myGridStatus.copyStatus ();
-			//cleanRoute ();
-			//routeCalculation ();
-			Debug.Log("prueba");
-
-		} 
-		else {
-			move ();
-		}*/
-
-		
 	}
 
 
-	//BFS ALGORITHM
-
 	public Node routeCalculation(){
 		Node [,] myNode;
-		List<Node> tail = new List<Node>();
+		Queue<Node> tail = new Queue<Node>();
 		Node checking;
 		double distanceBetweenSquare;
-
-
+		
+		
 		myNode = new Node[gridStatus.xSize, gridStatus.zSize];
-
+		
 		for (int i=0; i<gridStatus.xSize; i++) {
 			for(int j=0; j<gridStatus.zSize; j++){
 				if(myGridStatus.personalStatus[i,j]==gridStatus.Status.Crystal)
@@ -86,41 +80,39 @@ public class Enemy : MonoBehaviour {
 			}
 		}
 		
-
+		
 		//Add the father element 
-		tail.Add (myNode [x, z]);
+		tail.Enqueue (myNode [x, z]);
 
-
+		
 		while (tail.Count!=0) {
-			checking = tail[0];
-			tail.RemoveAt (0);
+			checking = tail.Dequeue ();
 
-			//Debug.Log ("CHECKING "+ checking.x +" "+ checking.z);
-
+			
 			for(int i=-1;i<=1;i++){
 				for(int j=-1;j<=1;j++){
 					if(inBoard (checking.x+i,checking.z+j)){
 						if(i==0 && j==0)
-							distanceBetweenSquare = 1;
+							distanceBetweenSquare = 1f;
 						else
 							distanceBetweenSquare = 1.41f;
-
+						
 						if(myNode[checking.x+i,checking.z+j].myStatus==FREE){
 							myNode[checking.x+i,checking.z+j].myStatus=CHECKED;
 							myNode[checking.x+i,checking.z+j].distance=checking.distance+distanceBetweenSquare;
 							myNode[checking.x+i,checking.z+j].previous = checking;
-							tail.Add (myNode[checking.x+i,checking.z+j]);
+							tail.Enqueue (myNode[checking.x+i,checking.z+j]);
 						}
-
+						
 						else if(myNode[checking.x+i,checking.z+j].myStatus==CHECKED){
 							if((myNode[checking.x+i,checking.z+j].distance)>(checking.distance+distanceBetweenSquare))
 							{
 								myNode[checking.x+i,checking.z+j].distance=checking.distance+distanceBetweenSquare;
 								myNode[checking.x+i,checking.z+j].previous = checking;
-								tail.Add (myNode[checking.x+i,checking.z+j]);
+								tail.Enqueue (myNode[checking.x+i,checking.z+j]);
 							}
 						}
-
+						
 						else if (myNode[checking.x+i,checking.z+j].myStatus==GOAL){
 							myNode[checking.x+i,checking.z+j].distance=checking.distance+1;
 							myNode[checking.x+i,checking.z+j].previous = checking;
@@ -129,11 +121,12 @@ public class Enemy : MonoBehaviour {
 					}
 				}
 			}
-	
+			
 		}
-
+		
 		return null;
 	}
+
 
 	public void cleanRoute() {
 		routeX = new List<int>();
@@ -153,7 +146,7 @@ public class Enemy : MonoBehaviour {
 		routeX.Reverse ();
 		routeZ.Reverse ();
 	}
-
+	
 
 	//MOVING
 	public void move(){
