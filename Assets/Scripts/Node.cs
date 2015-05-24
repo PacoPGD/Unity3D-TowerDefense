@@ -8,7 +8,7 @@ public class Node {
 	public int z;
 	public int myStatus;
 
-	public int distance = INFINITE;
+	public double distance = INFINITE;
 	public Node previous=null;
 
 	public Node(int status, int valueX, int valueZ){
