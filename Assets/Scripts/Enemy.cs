@@ -46,6 +46,8 @@ public class Enemy : MonoBehaviour {
 	void Update () {
 		paintLife ();
 		move ();
+		checkDie ();
+
 		/*
 		if (!myGridStatus.compareStatus ()) {
 			//myGridStatus.copyStatus ();
@@ -168,6 +170,11 @@ public class Enemy : MonoBehaviour {
 		life = life - damage;
 	}
 
+	public void checkDie(){
+		if(life<=0)
+			Destroy(gameObject);
+	}
+
 	//LIFEBAR
 	public void initLifeBar(){
 		for (int i=0; i<maxLife; i++) {
@@ -180,6 +187,9 @@ public class Enemy : MonoBehaviour {
 	public void paintLife(){
 		for (int i=0; i<life; i++) {
 			lifeBar[i].transform.position = (transform.position+ new Vector3(i-5,5,0));
+		}
+		for (int i=life; i<maxLife; i++) {
+			Destroy(lifeBar[i].gameObject);
 		}
 	}
 	

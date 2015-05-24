@@ -3,64 +3,77 @@ using System.Collections;
 
 public class Turret : MonoBehaviour {
 
-	public GameObject projectile; 
+	public GameObject projectile;
 
 	Transform target;
-	Transform turretControl;
-	Transform [] muzzlePositions;
+	//Transform turretControl;
+
 
 	float reloadTime=1;
+	//float turnSpeed=5;
+	float firePauseTime =0.25f;
 
-	int damage;
+	float damage;
 
-	public float speed = 3;
 
 	private double nextFireTime;
+	private float nextMoveTime;
 
 
-	private Vector3 targetPos;
+	//private Quaternion desiredRotation;
 
 
+	
 	void Update ()
 	{
 		if (target)
 		{
+			if (Time.time >= nextMoveTime)
+			{
+				CalculateAimPosition(target.position);
+				//turretControl.rotation = Quaternion.Lerp(turretControl.rotation, desiredRotation, Time.deltaTime * turnSpeed);
+			}
+			
 			if (Time.time >= nextFireTime)
 			{
 				FireProjectile();
 			}
 		}
-		
-
 	}
 
 	void OnTriggerEnter(Collider other){
-
-		if (other.gameObject.GetComponent<Enemy>())
-		{
+		if (other.gameObject.GetComponent<Enemy> ()) {
 			nextFireTime = Time.time + (reloadTime * 0.5);
 			target = other.gameObject.transform;
 		}
 	}
-	
+		
 	void OnTriggerExit(Collider other){
-	
-		if (other.gameObject.transform == target)
-		{
+		if (other.gameObject.transform==target) {
 			target = null;
 		}
+		if (other.gameObject.GetComponent<Projectile>()) {
+			Destroy(other.gameObject);
+		}
+	}
+		
+	void CalculateAimPosition(Vector3 targetPos)
+	{
+		//Vector3 aimPoint = new Vector3 (targetPos.x, target.position.y, target.position.z);
+		//desiredRotation = Quaternion.LookRotation(aimPoint);
 	}
 
 	void FireProjectile()
 	{
-		nextFireTime = Time.time + reloadTime;
+		GameObject aux;
+		aux = projectile;
 
-		projectile = (GameObject)Instantiate (projectile);
-		projectile.transform.position += transform.position;
+		nextFireTime = Time.time + reloadTime;
+		nextMoveTime = Time.time + firePauseTime;
+
+		aux = (GameObject)Instantiate (projectile);
+		aux.transform.position = transform.position;
 	}
-	
-			
-			
-			
+
 }
 		

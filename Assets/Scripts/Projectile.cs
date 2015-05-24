@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour {
 
-	float speed = 10;
-	float range = 10;
-	int damage = 1;
+	float speed = 100;
+
+	int damage = 5;
 
 	private float distance;
 
@@ -17,11 +17,6 @@ public class Projectile : MonoBehaviour {
 	{
 		transform.Translate(Vector3.forward * Time.deltaTime * speed);
 		distance += Time.deltaTime * speed;
-		
-		if (distance >= range)
-		{
-			Destroy(gameObject);
-		}
 	}
 	
 	void OnTriggerEnter(Collider other){
