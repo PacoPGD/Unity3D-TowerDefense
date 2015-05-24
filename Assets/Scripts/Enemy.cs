@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -26,11 +26,11 @@ public class Enemy : MonoBehaviour {
 	private int x; //X coordinate in the board of this enemy
 	private int z; //Z coordinate in the board of this enemy
 	
-	List<int> routeX = new List<int>();//X coordinate in the board of destiny
-	List<int> routeZ = new List<int>();//Z coordinate in the board of destiny
+	Stack<int> routeX = new Stack<int>();//X coordinate in the board of destiny
+	Stack<int> routeZ = new Stack<int>();//Z coordinate in the board of destiny
 
-	private static int CALCULATING = 0;
-	private static int MOVING = 1;
+	private static int CALCULATING = 4;
+	private static int MOVING = 5;
 
 	private int action=CALCULATING;
 
@@ -50,7 +50,8 @@ public class Enemy : MonoBehaviour {
 		if (action == CALCULATING) {
 			writeRoute (routeCalculation ());
 			action = MOVING;
-		} else {
+		} 
+		else if (action == MOVING) {
 			move ();
 		}
 
@@ -129,33 +130,40 @@ public class Enemy : MonoBehaviour {
 
 
 	public void cleanRoute() {
-		routeX = new List<int>();
-		routeZ = new List<int>();
+		routeX = new Stack<int>();
+		routeZ = new Stack<int>();
 	}
 
 	public void writeRoute(Node destiny){
 		Node aux;
 		aux = destiny;
 
+		cleanRoute ();
+
 		while (aux.previous!=null) {
-			routeX.Add (aux.x);
-			routeZ.Add (aux.z);
+
+			routeX.Push (aux.x);
+			routeZ.Push (aux.z);
 			aux = aux.previous;
+
 		}
 
-		routeX.Reverse ();
-		routeZ.Reverse ();
+
 	}
 	
 
 	//MOVING
 	public void move(){
+		int xDestiny;
+		int zDestiny;
 		if (routeX.Count != 0) {
-			goSquare (routeX [0], routeZ [0]);
+			xDestiny = routeX.Peek ();
+			zDestiny = routeZ.Peek ();
+			goSquare (xDestiny, zDestiny);
 
-			if (x == routeX [0] && z == routeZ [0]) {
-				routeX.RemoveAt (0);
-				routeZ.RemoveAt (0);
+			if (x == xDestiny && z == zDestiny) {
+				routeX.Pop();
+				routeZ.Pop();
 			}
 		} 
 	}

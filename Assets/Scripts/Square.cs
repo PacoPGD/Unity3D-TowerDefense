@@ -2,15 +2,7 @@ using UnityEngine;
 using System.Collections;
 
 public class Square : MonoBehaviour {
-	enum Status
-	{
-		Crystal, //It indicates the square have a crystal
-		Free,  //It indicates if the square is free
-		Tower, //It indicates the square have a tower
-		Generator, // It indicates the square generate enemies
-	};
-
-
+	
 	public GameObject crystal; //A crystal GameObject, represent a crystal
 	public GameObject blueCannonTurret; // blueCannonTurret GameObject, represent a Blue Cannon Turret
 	public GameObject enemyNormal; // enemyNormal GameObject, represent a Normal Enemy
