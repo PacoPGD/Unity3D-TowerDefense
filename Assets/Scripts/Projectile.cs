@@ -3,11 +3,10 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour {
 
-	float speed = 100;
+	float speed = 150;
 
-	int damage = 5;
+	int damage = 2;
 
-	private float distance;
 
 	void Start(){
 		gameObject.GetComponent<Renderer>().material.color = Color.red;
@@ -16,11 +15,9 @@ public class Projectile : MonoBehaviour {
 	void Update ()
 	{
 		transform.Translate(Vector3.forward * Time.deltaTime * speed);
-		distance += Time.deltaTime * speed;
 	}
 	
 	void OnTriggerEnter(Collider other){
-	
 		if(other.gameObject.GetComponent<Enemy>())
 		{
 			other.gameObject.GetComponent<Enemy>().ApplyDamage(damage);
@@ -28,5 +25,8 @@ public class Projectile : MonoBehaviour {
 		}
 	}
 
+	public void selectTarget(Transform target){
+
+	}
 
 }

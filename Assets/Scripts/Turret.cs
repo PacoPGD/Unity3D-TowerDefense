@@ -5,23 +5,22 @@ public class Turret : MonoBehaviour {
 
 	public GameObject projectile;
 
+	
 	Transform target;
-	//Transform turretControl;
+	Transform turretControl;
 
 
 	float reloadTime=1;
-	//float turnSpeed=5;
-	float firePauseTime =0.25f;
-
-	float damage;
-
+	float turnSpeed=10;
+	float firePauseTime =0.05f;
 
 	private double nextFireTime;
 	private float nextMoveTime;
 
 
-	//private Quaternion desiredRotation;
-
+	void Start(){
+		turretControl = transform.GetChild (0);
+	}
 
 	
 	void Update ()
@@ -30,16 +29,16 @@ public class Turret : MonoBehaviour {
 		{
 			if (Time.time >= nextMoveTime)
 			{
-				CalculateAimPosition(target.position);
-				//turretControl.rotation = Quaternion.Lerp(turretControl.rotation, desiredRotation, Time.deltaTime * turnSpeed);
+				turretControl.rotation = Quaternion.Lerp(turretControl.rotation, CalculateAimPosition (), Time.deltaTime * turnSpeed);
 			}
 			
 			if (Time.time >= nextFireTime)
 			{
-				FireProjectile();
+				//FireProjectile();
 			}
 		}
 	}
+	
 
 	void OnTriggerEnter(Collider other){
 		if (other.gameObject.GetComponent<Enemy> ()) {
@@ -57,22 +56,22 @@ public class Turret : MonoBehaviour {
 		}
 	}
 		
-	void CalculateAimPosition(Vector3 targetPos)
+	Quaternion CalculateAimPosition()
 	{
-		//Vector3 aimPoint = new Vector3 (targetPos.x, target.position.y, target.position.z);
-		//desiredRotation = Quaternion.LookRotation(aimPoint);
+		Vector3 aimPoint = new Vector3 (target.position.x, target.position.y, target.position.z);
+		Vector3 originPoint = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+
+		Quaternion desiredRotation = Quaternion.LookRotation(aimPoint-originPoint);
+		return desiredRotation;
 	}
 
 	void FireProjectile()
 	{
-		GameObject aux;
-		aux = projectile;
-
 		nextFireTime = Time.time + reloadTime;
 		nextMoveTime = Time.time + firePauseTime;
 
-		aux = (GameObject)Instantiate (projectile);
-		aux.transform.position = transform.position;
+		Instantiate (projectile,turretControl.position,turretControl.rotation);
+	
 	}
 
 }

@@ -155,14 +155,13 @@ public class Enemy : MonoBehaviour {
 
 	public void goSquare(int squareX, int squareZ){
 		if (x < squareX)
-			transform.position += new Vector3 (velocity, 0, 0);
+			transform.Translate(new Vector3 (1, 0, 0) * Time.deltaTime * velocity);
 		if (x > squareX)
-			transform.position -= new Vector3 (velocity, 0, 0);
+			transform.Translate(new Vector3 (-1, 0, 0) * Time.deltaTime * velocity);
 		if (z < squareZ)
-			transform.position += new Vector3 (0, 0, velocity);
+			transform.Translate(new Vector3 (0, 0, 1) * Time.deltaTime * velocity);
 		if (z > squareZ)
-			transform.position -= new Vector3 (0, 0, velocity);
-
+			transform.Translate(new Vector3 (0, 0, -1) * Time.deltaTime * velocity);
 	}
 	
 	//BATTLE
