@@ -34,7 +34,7 @@ public class Turret : MonoBehaviour {
 			
 			if (Time.time >= nextFireTime)
 			{
-				//FireProjectile();
+				FireProjectile();
 			}
 		}
 	}

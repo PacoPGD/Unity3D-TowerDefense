@@ -93,7 +93,7 @@ public class Grid : MonoBehaviour
 		if (Time.time >= enemyTimeGenerate)
 		{
 			enemyTimeGenerate = Time.time+enemyTimeGenerate;
-			grid[(int)Random.Range (0,xSize),zSize-1].GetComponent<Square>().generateEnemy();
+			grid[(int)Random.Range (0,xSize-1),zSize-1].GetComponent<Square>().generateEnemy();
 		}
 	}
 	

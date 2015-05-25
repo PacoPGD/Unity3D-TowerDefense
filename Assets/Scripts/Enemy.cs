@@ -26,8 +26,8 @@ public class Enemy : MonoBehaviour {
 	private int x; //X coordinate in the board of this enemy
 	private int z; //Z coordinate in the board of this enemy
 	
-	Stack<int> routeX = new Stack<int>();//X coordinate in the board of destiny
-	Stack<int> routeZ = new Stack<int>();//Z coordinate in the board of destiny
+	private Stack<int> routeX = new Stack<int>();//X coordinate in the board of destiny
+	private Stack<int> routeZ = new Stack<int>();//Z coordinate in the board of destiny
 
 	private static int CALCULATING = 4;
 	private static int MOVING = 5;
@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if (action == CALCULATING) {
-			writeRoute (routeCalculation ());
+			routeCalculation ();
 			action = MOVING;
 		} 
 		else if (action == MOVING) {
@@ -61,10 +61,11 @@ public class Enemy : MonoBehaviour {
 	}
 
 
-	public Node routeCalculation(){
+	public void routeCalculation(){
 		Node [,] myNode;
 		Queue<Node> tail = new Queue<Node>();
 		Node checking;
+		Node goal=null;
 		double distanceBetweenSquare;
 		
 		
@@ -115,23 +116,26 @@ public class Enemy : MonoBehaviour {
 						}
 						
 						else if (myNode[checking.x+i,checking.z+j].myStatus==GOAL){
-							myNode[checking.x+i,checking.z+j].distance=checking.distance+1;
-							myNode[checking.x+i,checking.z+j].previous = checking;
-							return myNode[checking.x+i,checking.z+j];
+							if((myNode[checking.x+i,checking.z+j].distance)>(checking.distance+distanceBetweenSquare))
+							{
+								myNode[checking.x+i,checking.z+j].distance=checking.distance+distanceBetweenSquare;
+								myNode[checking.x+i,checking.z+j].previous = checking;
+								goal = myNode[checking.x+i,checking.z+j];
+							}
 						}
 					}
 				}
 			}
 			
 		}
-		
-		return null;
+
+		writeRoute (goal);
 	}
 
 
 	public void cleanRoute() {
-		routeX = new Stack<int>();
-		routeZ = new Stack<int>();
+		routeX.Clear ();
+		routeZ.Clear ();
 	}
 
 	public void writeRoute(Node destiny){
@@ -140,12 +144,12 @@ public class Enemy : MonoBehaviour {
 
 		cleanRoute ();
 
-		while (aux.previous!=null) {
-
-			routeX.Push (aux.x);
-			routeZ.Push (aux.z);
-			aux = aux.previous;
-
+		if (destiny != null) {
+			while (aux.previous!=null) {
+				routeX.Push (aux.x);
+				routeZ.Push (aux.z);
+				aux = aux.previous;
+			}
 		}
 
 
