@@ -4,13 +4,13 @@ using System.Collections;
 public class Turret : MonoBehaviour {
 
 	public GameObject projectile;
+	public int damage;
+	public float reloadTime=1;
 
-	
+
 	private Transform target;
 	private Transform turretControl;
 
-
-	private float reloadTime=1;
 	private float turnSpeed=10;
 	private float firePauseTime =0.05f;
 
@@ -19,6 +19,7 @@ public class Turret : MonoBehaviour {
 
 
 	void Start(){
+		projectile.GetComponent<Projectile> ().setDamage (10);
 		turretControl = transform.GetChild (0);
 	}
 

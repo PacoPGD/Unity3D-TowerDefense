@@ -6,6 +6,8 @@ public class Square : MonoBehaviour {
 	public GameObject crystal; //A crystal GameObject, represent a crystal
 	public GameObject blueCannonTurret; // blueCannonTurret GameObject, represent a Blue Cannon Turret
 	public GameObject enemyNormal; // enemyNormal GameObject, represent a Normal Enemy
+	public GameObject enemySwift; // enemySwift GameObject, represent a Normal Enemy
+	public GameObject enemyArmoured; // enemyArmoured GameObject, represent a Normal Enemy
 
 	private int x;
 	private int z;
@@ -41,7 +43,7 @@ public class Square : MonoBehaviour {
 	}
 
 
-
+	//Generate a crystal in this square
 	public bool generateCrystal(){
 		if (gridStatus.myStatus[x,z]==gridStatus.Status.Free) {
 			crystal = (GameObject)Instantiate (crystal);
@@ -52,13 +54,34 @@ public class Square : MonoBehaviour {
 			return false;
 	}
 
+	//Generate a enemy in this square
 	public void generateEnemy(){
-		if (gridStatus.myStatus[x,z] == gridStatus.Status.Generator) {
-			enemyNormal = (GameObject)Instantiate (enemyNormal);
-			enemyNormal.transform.position = transform.position;
+		int selectEnemy;
+		if (gridStatus.myStatus [x, z] == gridStatus.Status.Generator) {
+			selectEnemy=(int)Random.Range (0,3);
+			if(selectEnemy==0)
+				generateNormalEnemy ();
+			else if(selectEnemy==1)
+				generateSwiftEnemy ();
+			else
+				generateArmouredEnemy ();
 		}
 	}
 
+	public void generateNormalEnemy(){
+		enemyNormal = (GameObject)Instantiate (enemyNormal);
+		enemyNormal.transform.position = transform.position;
+	}
+
+	public void generateSwiftEnemy(){
+		enemySwift = (GameObject)Instantiate (enemySwift);
+		enemySwift.transform.position = transform.position;
+	}
+
+	public void generateArmouredEnemy(){
+		enemyArmoured = (GameObject)Instantiate (enemyArmoured);
+		enemyArmoured.transform.position = transform.position;
+	}
 
 	public void setX(int value){
 		x = value;
@@ -68,6 +91,7 @@ public class Square : MonoBehaviour {
 		z = value;
 	}
 
+	//Send the x and Z to the enemy
 	void OnTriggerEnter(Collider other){
 		if (other.gameObject.GetComponent<Enemy> ()) {
 			other.gameObject.GetComponent<Enemy> ().setX (x);

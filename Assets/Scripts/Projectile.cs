@@ -5,7 +5,7 @@ public class Projectile : MonoBehaviour {
 
 	public float speed = 150;
 
-	public int damage = 2;
+	private int damage;
 
 
 	void Start(){
@@ -16,7 +16,11 @@ public class Projectile : MonoBehaviour {
 	{
 		transform.Translate(Vector3.forward * Time.deltaTime * speed);
 	}
-	
+
+	public void setDamage(int value){
+		damage = value;
+	}
+
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.GetComponent<Enemy>())
 		{

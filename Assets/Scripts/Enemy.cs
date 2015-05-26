@@ -5,44 +5,46 @@ using System.Collections.Generic;
 
 public class Enemy : MonoBehaviour {
 
-	public float velocity;
+	//Static variables
+	//The status in the grid
+	private static int GOAL = 0; //Crystal
+	private static int FREE = 1; //Free square
+	private static int BLOCK= 2; //Square with obstacle
 
-	public int maxLife;
+	//The action of the enemy
+	private static int CALCULATING = 3; //Calculating route
+	private static int MOVING = 4; //Moving
 
-	public GameObject lifePortion;
+	//Public variables
+	public float velocity; //velocity in game of enemy
+	public int maxLife; //Max life of enemy
+	public GameObject lifePortion; //Object for representing a lifePortion
 
-	private GameObject [] lifeBar;
-	
 
-	private int life;
-
-	private static int GOAL = 0;
-	private static int FREE = 1;
-	private static int BLOCK= 2;
-
+	//Private variables
+	private GameObject [] lifeBar;//Array of object for representing the lifeBar
+	private int life;//Actual life
 	private int x; //X coordinate in the board of this enemy
 	private int z; //Z coordinate in the board of this enemy
-	
 	private Stack<int> routeX = new Stack<int>();//X coordinate in the board of destiny
 	private Stack<int> routeZ = new Stack<int>();//Z coordinate in the board of destiny
 
-	private static int CALCULATING = 3;
-	private static int MOVING = 4;
+	private int action=CALCULATING;//Action of the enemy
 
-	private int action=CALCULATING;
+	private float nextCalculating;//Time between calculations
+	private float timeRecalculating;//Time of next calculate
 
-	private float timeRecalculating;
-	private float nextCalculating =1;
 
-	// Use this for initialization
 	void Start () {
+		nextCalculating = 1;
 		life = maxLife;
 		lifeBar = new GameObject[maxLife];
 		initLifeBar ();
 	}
 
-	// Update is called once per frame
+
 	void Update () {
+		//Action depens of action variable
 		if (action == CALCULATING) {
 			timeRecalculating=Time.time+nextCalculating;
 			routeCalculation ();
@@ -52,35 +54,38 @@ public class Enemy : MonoBehaviour {
 			move ();
 		}
 
+		//whenever time passes we are in CALCULATING status
 		if (Time.time >= timeRecalculating)
 		{
 			action = CALCULATING;
 		}
 		
-		paintLife ();
-		checkDie ();
-
+		paintLife (); 
+		checkDie (); 
 	}
 
 
+	/**************************************
+	 * This is the BFS algorithm, this function calcule the final node and the best route
+	 * 
+	 ***************************************/
 
 	public void routeCalculation(){
 		Node [,] myNode;
-		Queue<Node> tail = new Queue<Node>();
-		Node checking;
-		Node neighbor;
-		Node goal=null;
-		double distanceBetweenSquare;
-		gridStatus myGridStatus = new gridStatus();
+		Queue<Node> tail = new Queue<Node>(); //Queue for check squares
+		Node checking; //The checking node
+		Node neighbor; //Neighbor of checking node
+		Node goal=null; //Node of destiny
+		double distanceBetweenSquare;// Distance between 2 squares
 
-		myGridStatus.copyStatus ();
+		//Save the gridStatus in myNode variable
 		myNode = new Node[gridStatus.xSize, gridStatus.zSize];
 		
 		for (int i=0; i<gridStatus.xSize; i++) {
 			for(int j=0; j<gridStatus.zSize; j++){
-				if(myGridStatus.personalStatus[i,j]==gridStatus.Status.Crystal)
+				if(gridStatus.myStatus[i,j]==gridStatus.Status.Crystal)
 					myNode[i,j] = new Node(GOAL,i,j);
-				else if(myGridStatus.personalStatus[i,j]==gridStatus.Status.Free)
+				else if(gridStatus.myStatus[i,j]==gridStatus.Status.Free)
 					myNode[i,j] = new Node(FREE,i,j);
 				else{
 					myNode[i,j] = new Node(BLOCK,i,j);
@@ -89,22 +94,23 @@ public class Enemy : MonoBehaviour {
 		}
 		
 		
-		//Add the father element 
+		//Add the father element in the queue
 		tail.Enqueue (myNode [x, z]);
 		myNode [x, z].distance = 0;
 		
 		while (tail.Count!=0) {
 			checking = tail.Dequeue ();
-
-			
+	
+			//Check the neighbors of checking node
 			for(int i=-1;i<=1;i++){
 				for(int j=-1;j<=1;j++){
 					if(inBoard (checking.x+i,checking.z+j)){
+						//Distances between squares
 						if(i==0 && j==0){
-							distanceBetweenSquare = 1.0f;
+							distanceBetweenSquare = 1.0f; //Next to square
 						}
 						else{
-							distanceBetweenSquare = 1.41f;
+							distanceBetweenSquare = 1.41f; //Diagonal
 						}
 
 						neighbor = myNode[checking.x+i,checking.z+j];
@@ -132,12 +138,13 @@ public class Enemy : MonoBehaviour {
 		writeRoute (goal);
 	}
 
-
+	//Clean the route to a node
 	public void cleanRoute() {
 		routeX.Clear ();
 		routeZ.Clear ();
 	}
 
+	//Write the route to a node
 	public void writeRoute(Node destiny){
 		Node aux;
 		aux = destiny;
@@ -156,6 +163,7 @@ public class Enemy : MonoBehaviour {
 	
 
 	//MOVING
+	//Visit the squares of route
 	public void move(){
 		int xDestiny;
 		int zDestiny;
@@ -171,6 +179,7 @@ public class Enemy : MonoBehaviour {
 		} 
 	}
 
+	//Go to a specific square
 	public void goSquare(int squareX, int squareZ){
 		if (x < squareX)
 			transform.Translate(new Vector3 (1, 0, 0) * Time.deltaTime * velocity);
@@ -205,6 +214,7 @@ public class Enemy : MonoBehaviour {
 		for (int i=0; i<life; i++) {
 			lifeBar[i].transform.position = (transform.position+ new Vector3(i-5,5,0));
 		}
+
 		for (int i=life; i<maxLife; i++) {
 			Destroy(lifeBar[i].gameObject);
 		}
@@ -221,6 +231,7 @@ public class Enemy : MonoBehaviour {
 		z = value;
 	}
 
+	//Check if the position exists on the board
 	public bool inBoard(int x, int z){
 		if (z >= 0 && z < gridStatus.zSize && x >= 0 && x < gridStatus.xSize) 
 			return true;
@@ -228,6 +239,7 @@ public class Enemy : MonoBehaviour {
 			return false;
 	}
 
+	//Print the status of the board
 	public void logBoard(Node[,] myNode){
 		for (int i=0; i<gridStatus.xSize; i++) {
 			for(int j=0; j<gridStatus.zSize; j++){

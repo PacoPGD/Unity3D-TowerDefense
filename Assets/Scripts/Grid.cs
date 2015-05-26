@@ -4,17 +4,17 @@ using System.Collections;
 public class Grid : MonoBehaviour 
 {		
 	public GameObject square; //A plane GameObject, represent a square
-	public int xSize = 10;
-	public int zSize = 10;
-	public int crystals = 1;
-	public float enemyTimeGenerate = 2;
+	public int xSize;// Number of squares in the x axis
+	public int zSize;// Number of squares in the z axis
+	public int crystals; //Number of crystals in game
+	public float enemyTimeGenerate; //Number of seconds between each enemy generation
 
 	private int width = 10; //width of a square
 	private int height = 10; //height of a square
 
 	private GameObject [,] grid;  //set of squares representing the board
 
-
+	//Load the squares in the grid and load the status of squares in the gridstatus
 	void Awake()
 	{
 		grid = new GameObject[xSize,zSize];
@@ -43,6 +43,7 @@ public class Grid : MonoBehaviour
 
 	}
 
+	//Paint lines to separate squares
 	void OnPostRender(){
 		for (int x=0; x<xSize; x++){
 			for (int z=0; z<zSize; z++){
@@ -67,29 +68,21 @@ public class Grid : MonoBehaviour
 	}
 
 
-
-	// Use this for initialization
 	void Start () 
 	{
 		int x = 0;
 
+		//Generate the crystals
 		while(x<crystals)
 		{
-			if(grid [Random.Range (0,xSize-1),Random.Range (0,zSize/3)].GetComponent<Square>().generateCrystal())
+			if(grid [Random.Range (0,xSize-1),Random.Range (1,zSize/3)].GetComponent<Square>().generateCrystal())
 				x++;
 		}
-
-
-		//grid[xSize-1,zSize-1].GetComponent<Square>().generateEnemy();
-		//grid[10,19].GetComponent<Square>().generateEnemy();
-		
-		
 	}
-	
-	// Update is called once per frame
+
 	void Update () 
 	{
-
+		//Enemy generation
 		if (Time.time >= enemyTimeGenerate)
 		{
 			enemyTimeGenerate = Time.time+enemyTimeGenerate;
