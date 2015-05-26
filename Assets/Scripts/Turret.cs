@@ -6,13 +6,13 @@ public class Turret : MonoBehaviour {
 	public GameObject projectile;
 
 	
-	Transform target;
-	Transform turretControl;
+	private Transform target;
+	private Transform turretControl;
 
 
-	float reloadTime=1;
-	float turnSpeed=10;
-	float firePauseTime =0.05f;
+	private float reloadTime=1;
+	private float turnSpeed=10;
+	private float firePauseTime =0.05f;
 
 	private double nextFireTime;
 	private float nextMoveTime;
@@ -40,19 +40,18 @@ public class Turret : MonoBehaviour {
 	}
 	
 
-	void OnTriggerEnter(Collider other){
-		if (other.gameObject.GetComponent<Enemy> ()) {
-			nextFireTime = Time.time + (reloadTime * 0.5);
-			target = other.gameObject.transform;
+	void OnTriggerStay(Collider other){
+		if (target == null){
+			if (other.gameObject.GetComponent<Enemy> ()) {
+				nextFireTime = Time.time + (reloadTime * 0.5);
+				target = other.gameObject.transform;
+			}
 		}
 	}
 		
 	void OnTriggerExit(Collider other){
 		if (other.gameObject.transform==target) {
 			target = null;
-		}
-		if (other.gameObject.GetComponent<Projectile>()) {
-			Destroy(other.gameObject);
 		}
 	}
 		

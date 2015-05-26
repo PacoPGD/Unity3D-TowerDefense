@@ -7,7 +7,7 @@ public class Grid : MonoBehaviour
 	public int xSize = 10;
 	public int zSize = 10;
 	public int crystals = 1;
-	public float enemyTimeGenerate = 5;
+	public float enemyTimeGenerate = 2;
 
 	private int width = 10; //width of a square
 	private int height = 10; //height of a square

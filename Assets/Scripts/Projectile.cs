@@ -3,9 +3,9 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour {
 
-	float speed = 150;
+	public float speed = 150;
 
-	int damage = 2;
+	public int damage = 2;
 
 
 	void Start(){
@@ -25,8 +25,5 @@ public class Projectile : MonoBehaviour {
 		}
 	}
 
-	public void selectTarget(Transform target){
-
-	}
 
 }

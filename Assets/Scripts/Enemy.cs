@@ -16,12 +16,9 @@ public class Enemy : MonoBehaviour {
 
 	private int life;
 
-	private gridStatus myGridStatus = new gridStatus();
-
 	private static int GOAL = 0;
 	private static int FREE = 1;
-	private static int CHECKED= 2;
-	private static int BLOCK= 3;
+	private static int BLOCK= 2;
 
 	private int x; //X coordinate in the board of this enemy
 	private int z; //Z coordinate in the board of this enemy
@@ -29,25 +26,25 @@ public class Enemy : MonoBehaviour {
 	private Stack<int> routeX = new Stack<int>();//X coordinate in the board of destiny
 	private Stack<int> routeZ = new Stack<int>();//Z coordinate in the board of destiny
 
-	private static int CALCULATING = 4;
-	private static int MOVING = 5;
+	private static int CALCULATING = 3;
+	private static int MOVING = 4;
 
 	private int action=CALCULATING;
 
+	private float timeRecalculating;
+	private float nextCalculating =1;
 
 	// Use this for initialization
 	void Start () {
 		life = maxLife;
 		lifeBar = new GameObject[maxLife];
 		initLifeBar ();
-		myGridStatus.copyStatus ();
-
-
 	}
 
 	// Update is called once per frame
 	void Update () {
 		if (action == CALCULATING) {
+			timeRecalculating=Time.time+nextCalculating;
 			routeCalculation ();
 			action = MOVING;
 		} 
@@ -55,20 +52,28 @@ public class Enemy : MonoBehaviour {
 			move ();
 		}
 
+		if (Time.time >= timeRecalculating)
+		{
+			action = CALCULATING;
+		}
+		
 		paintLife ();
 		checkDie ();
 
 	}
 
 
+
 	public void routeCalculation(){
 		Node [,] myNode;
 		Queue<Node> tail = new Queue<Node>();
 		Node checking;
+		Node neighbor;
 		Node goal=null;
 		double distanceBetweenSquare;
-		
-		
+		gridStatus myGridStatus = new gridStatus();
+
+		myGridStatus.copyStatus ();
 		myNode = new Node[gridStatus.xSize, gridStatus.zSize];
 		
 		for (int i=0; i<gridStatus.xSize; i++) {
@@ -77,15 +82,16 @@ public class Enemy : MonoBehaviour {
 					myNode[i,j] = new Node(GOAL,i,j);
 				else if(myGridStatus.personalStatus[i,j]==gridStatus.Status.Free)
 					myNode[i,j] = new Node(FREE,i,j);
-				else
+				else{
 					myNode[i,j] = new Node(BLOCK,i,j);
+				}
 			}
 		}
 		
 		
 		//Add the father element 
 		tail.Enqueue (myNode [x, z]);
-
+		myNode [x, z].distance = 0;
 		
 		while (tail.Count!=0) {
 			checking = tail.Dequeue ();
@@ -94,33 +100,27 @@ public class Enemy : MonoBehaviour {
 			for(int i=-1;i<=1;i++){
 				for(int j=-1;j<=1;j++){
 					if(inBoard (checking.x+i,checking.z+j)){
-						if(i==0 && j==0)
-							distanceBetweenSquare = 1f;
-						else
+						if(i==0 && j==0){
+							distanceBetweenSquare = 1.0f;
+						}
+						else{
 							distanceBetweenSquare = 1.41f;
-						
-						if(myNode[checking.x+i,checking.z+j].myStatus==FREE){
-							myNode[checking.x+i,checking.z+j].myStatus=CHECKED;
-							myNode[checking.x+i,checking.z+j].distance=checking.distance+distanceBetweenSquare;
-							myNode[checking.x+i,checking.z+j].previous = checking;
-							tail.Enqueue (myNode[checking.x+i,checking.z+j]);
 						}
-						
-						else if(myNode[checking.x+i,checking.z+j].myStatus==CHECKED){
-							if((myNode[checking.x+i,checking.z+j].distance)>(checking.distance+distanceBetweenSquare))
-							{
-								myNode[checking.x+i,checking.z+j].distance=checking.distance+distanceBetweenSquare;
-								myNode[checking.x+i,checking.z+j].previous = checking;
-								tail.Enqueue (myNode[checking.x+i,checking.z+j]);
+
+						neighbor = myNode[checking.x+i,checking.z+j];
+
+						if((neighbor.distance)>(checking.distance+distanceBetweenSquare))
+						{
+							if(neighbor.myStatus == FREE){
+									neighbor.distance = checking.distance+distanceBetweenSquare;
+									neighbor.previous = checking;
+									tail.Enqueue (neighbor);
 							}
-						}
-						
-						else if (myNode[checking.x+i,checking.z+j].myStatus==GOAL){
-							if((myNode[checking.x+i,checking.z+j].distance)>(checking.distance+distanceBetweenSquare))
-							{
-								myNode[checking.x+i,checking.z+j].distance=checking.distance+distanceBetweenSquare;
-								myNode[checking.x+i,checking.z+j].previous = checking;
-								goal = myNode[checking.x+i,checking.z+j];
+							
+							else if (neighbor.myStatus==GOAL){
+									neighbor.distance=checking.distance+distanceBetweenSquare;
+									neighbor.previous = checking;
+									goal = neighbor;
 							}
 						}
 					}
@@ -152,7 +152,6 @@ public class Enemy : MonoBehaviour {
 			}
 		}
 
-
 	}
 	
 
@@ -166,8 +165,8 @@ public class Enemy : MonoBehaviour {
 			goSquare (xDestiny, zDestiny);
 
 			if (x == xDestiny && z == zDestiny) {
-				routeX.Pop();
-				routeZ.Pop();
+				routeX.Pop ();
+				routeZ.Pop ();
 			}
 		} 
 	}
