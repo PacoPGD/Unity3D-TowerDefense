@@ -5,21 +5,18 @@ public class Projectile : MonoBehaviour {
 
 	public float speed = 150;
 
-	private int damage;
+	public int damage=10;
 
 
 	void Start(){
-		gameObject.GetComponent<Renderer>().material.color = Color.red;
+		gameObject.GetComponent<Renderer>().material.color = Color.blue;
 	}
 
 	void Update ()
 	{
 		transform.Translate(Vector3.forward * Time.deltaTime * speed);
 	}
-
-	public void setDamage(int value){
-		damage = value;
-	}
+	
 
 	void OnTriggerEnter(Collider other){
 		if(other.gameObject.GetComponent<Enemy>())

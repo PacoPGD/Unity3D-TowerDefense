@@ -1,10 +1,10 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Turret : MonoBehaviour {
+public class BlueCannonTurret : MonoBehaviour {
+
 
 	public GameObject projectile;
-	public int damage;
 	public float reloadTime=1;
 
 
@@ -19,7 +19,6 @@ public class Turret : MonoBehaviour {
 
 
 	void Start(){
-		//projectile.GetComponent<Projectile> ().setDamage (10);
 		turretControl = transform.GetChild (0);
 	}
 
@@ -71,8 +70,8 @@ public class Turret : MonoBehaviour {
 		nextMoveTime = Time.time + firePauseTime;
 
 		Instantiate (projectile,turretControl.position,turretControl.rotation);
-	
 	}
+	
 
 }
 		

@@ -3,9 +3,9 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 	
-	public float moveSpeed = 4.0f;	// Speed of camera following mouse
-	public float zoomSpeed = 4.0f; // Speed of camera zoom
-	public float rotSpeed = 0.3f; // Speed of camera rotation
+	public float moveSpeed;	// Speed of camera following mouse
+	public float zoomSpeed; // Speed of camera zoom
+	public float rotSpeed; // Speed of camera rotation
 
 
 	private Transform pivotPoint;	//this should be the location the camera tumbles around

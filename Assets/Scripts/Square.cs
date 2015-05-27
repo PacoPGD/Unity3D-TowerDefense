@@ -5,6 +5,7 @@ public class Square : MonoBehaviour {
 	
 	public GameObject crystal; //A crystal GameObject, represent a crystal
 	public GameObject blueCannonTurret; // blueCannonTurret GameObject, represent a Blue Cannon Turret
+	public GameObject redLaserTurret; // redLaserTurret GameObject, represent a Red Laser Turret
 	public GameObject enemyNormal; // enemyNormal GameObject, represent a Normal Enemy
 	public GameObject enemySwift; // enemySwift GameObject, represent a Normal Enemy
 	public GameObject enemyArmoured; // enemyArmoured GameObject, represent a Normal Enemy
@@ -21,9 +22,16 @@ public class Square : MonoBehaviour {
 
 	void OnMouseDown() {
 		if (gridStatus.myStatus[x,z] == gridStatus.Status.Free) {
-			blueCannonTurret = (GameObject)Instantiate (blueCannonTurret);
-			blueCannonTurret.transform.position += transform.position;
-			gridStatus.myStatus[x,z] = gridStatus.Status.Tower;
+			if(gridStatus.towerSelection==1){
+				blueCannonTurret = (GameObject)Instantiate (blueCannonTurret);
+				blueCannonTurret.transform.position += transform.position;
+				gridStatus.myStatus[x,z] = gridStatus.Status.Tower;
+			}
+			else{
+				redLaserTurret = (GameObject)Instantiate (redLaserTurret);
+				redLaserTurret.transform.position += transform.position;
+				gridStatus.myStatus[x,z] = gridStatus.Status.Tower;
+			}
 		}
 
 	}

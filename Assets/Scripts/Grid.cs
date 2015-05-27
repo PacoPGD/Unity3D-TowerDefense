@@ -19,9 +19,11 @@ public class Grid : MonoBehaviour
 	{
 		grid = new GameObject[xSize,zSize];
 
+		//Prepare the static gridStatus
 		gridStatus.myStatus = new gridStatus.Status[xSize, zSize];
 		gridStatus.xSize = xSize;
 		gridStatus.zSize = zSize;
+		gridStatus.towerSelection = 1;
 
 		for (int x = 0; x < xSize; x++) 
 		{
@@ -73,6 +75,13 @@ public class Grid : MonoBehaviour
 
 	}
 
+	void OnGUI(){
+
+
+		
+	}
+
+
 
 	void Start () 
 	{
@@ -88,6 +97,7 @@ public class Grid : MonoBehaviour
 
 	void Update () 
 	{
+		selectTower ();
 		//Enemy generation
 		if (Time.time >= enemyTimeGenerate)
 		{
@@ -95,6 +105,12 @@ public class Grid : MonoBehaviour
 			grid[(int)Random.Range (0,xSize-1),zSize-1].GetComponent<Square>().generateEnemy();
 		}
 	}
-	
+
+	void selectTower(){
+		if(Input.GetKeyDown (KeyCode.Alpha1))
+		   gridStatus.towerSelection=1;
+		if(Input.GetKeyDown (KeyCode.Alpha2))
+		   gridStatus.towerSelection=2;
+	}
 }
 

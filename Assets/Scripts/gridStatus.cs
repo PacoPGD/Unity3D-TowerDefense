@@ -16,6 +16,6 @@ public class gridStatus{
 	public static int xSize;
 	public static int zSize;
 
-
+	public static int towerSelection;
 
 }
