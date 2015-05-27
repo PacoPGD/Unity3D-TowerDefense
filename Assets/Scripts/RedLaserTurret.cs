@@ -12,10 +12,8 @@ public class RedLaserTurret : MonoBehaviour {
 	private Transform turretControl;
 
 	private float turnSpeed=10;
-	private float firePauseTime =0.05f;
 
-	private double nextFireTime;
-	private float nextMoveTime;
+
 
 	private GameObject laserBeam;
 
@@ -29,10 +27,9 @@ public class RedLaserTurret : MonoBehaviour {
 	{
 		if (target)
 		{
-			if (Time.time >= nextMoveTime)
-			{
-				turretControl.rotation = Quaternion.Lerp(turretControl.rotation, CalculateAimPosition (), Time.deltaTime * turnSpeed);
-			}
+
+			turretControl.rotation = Quaternion.Lerp(turretControl.rotation, CalculateAimPosition (), Time.deltaTime * turnSpeed);
+
 			
 			laserBeam.transform.rotation = turretControl.rotation;
 		}
@@ -42,7 +39,6 @@ public class RedLaserTurret : MonoBehaviour {
 	void OnTriggerStay(Collider other){
 		if (target == null){
 			if (other.gameObject.GetComponent<Enemy> ()) {
-				nextFireTime = Time.time + (reloadTime * 0.5);
 				target = other.gameObject.transform;
 				InstanceProjectile ();
 			}
@@ -50,9 +46,11 @@ public class RedLaserTurret : MonoBehaviour {
 	}
 		
 	void OnTriggerExit(Collider other){
-		if (other.gameObject.transform==target) {
-			target = null;
-			laserBeam = null;
+		if (other.gameObject.GetComponent<Enemy> ()) {
+			if (other.gameObject.transform == target) {
+				target = null;
+				laserBeam = null;
+			}
 		}
 	}
 		

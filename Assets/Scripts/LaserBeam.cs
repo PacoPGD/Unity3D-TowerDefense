@@ -6,12 +6,14 @@ using System.Collections;
 public class LaserBeam : MonoBehaviour {
 	
 	private LineRenderer line;
-	private int length;
-	public int damage=1;
-	
+
+	public int damagePerSecond=10;
+
+	private float nextDamageTime;
 	
 	// Use this for initialization
 	void Start () {
+		nextDamageTime = Time.time;
 		line = GetComponent<LineRenderer>();
 		line.SetWidth(1, 1);
 		line.SetColors (Color.red,Color.red);
@@ -28,13 +30,20 @@ public class LaserBeam : MonoBehaviour {
 		
 		line.SetPosition(0, ray.origin);
 		
-		if(Physics.Raycast(ray, out hit, 100))
+		if(Physics.Raycast(ray, out hit, 200))
 		{
 			line.SetPosition(1, hit.point);
 		}
 		else
-			line.SetPosition(1, ray.GetPoint(100));
-	
+			line.SetPosition(1, ray.GetPoint(200));
+
+		if (Time.time >= nextDamageTime) {
+			if (hit.collider.gameObject.GetComponent<Enemy> ()) {
+				hit.collider.gameObject.GetComponent<Enemy> ().ApplyDamage (damagePerSecond);
+				nextDamageTime=Time.time+1;
+			}
+		}
+
 	}
 	
 }

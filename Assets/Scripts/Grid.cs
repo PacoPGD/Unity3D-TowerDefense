@@ -76,8 +76,22 @@ public class Grid : MonoBehaviour
 	}
 
 	void OnGUI(){
+		string blue;
+		string red;
 
+		if (gridStatus.towerSelection == 1) {
+			blue = "Blue Cannon Turret\n ACTIVE";
+			red = "Red Laser Turret";
+		}
+		else {
+			blue = "Blue Cannon Turret";
+			red = "Red Laser Turret\n ACTIVE";
+		}
 
+		GUI.Box (new Rect (0, 0, 200, 50), "press 1 or 2 to select the turret");
+		GUI.Box (new Rect (0, 50, 200, 50), blue);
+		GUI.Box (new Rect (0, 100, 200, 50), red);
+	
 		
 	}
 
