@@ -36,6 +36,12 @@ public class Grid : MonoBehaviour
 				grid [x,z].GetComponent<Square>().setX(x);
 				grid [x,z].GetComponent<Square>().setZ(z);
 
+				//Define the center of the screen and send this center to cameramovement script 
+				if(x==xSize/2 && z==zSize/2){
+					GetComponent<CameraMovement>().setPivotPoint (grid[x,z].transform);
+				}
+
+				//The squares enemies generator
 				if(z==zSize-1)
 					gridStatus.myStatus[x,z]=gridStatus.Status.Generator;
 			}

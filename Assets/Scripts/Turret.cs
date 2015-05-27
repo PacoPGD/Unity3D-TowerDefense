@@ -19,7 +19,7 @@ public class Turret : MonoBehaviour {
 
 
 	void Start(){
-		projectile.GetComponent<Projectile> ().setDamage (10);
+		//projectile.GetComponent<Projectile> ().setDamage (10);
 		turretControl = transform.GetChild (0);
 	}
 
