@@ -4,10 +4,7 @@ using System.Collections;
 public class RedLaserTurret : MonoBehaviour {
 
 	public GameObject projectile;
-	public int damage;
-	public float reloadTime=1;
-
-
+	
 	private Transform target;
 	private Transform turretControl;
 
