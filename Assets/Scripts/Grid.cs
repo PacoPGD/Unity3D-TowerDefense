@@ -14,6 +14,7 @@ public class Grid : MonoBehaviour
 
 	private GameObject [,] grid;  //set of squares representing the board
 
+	private float nextGenerate;
 	//Load the squares in the grid and load the status of squares in the gridstatus
 	void Awake()
 	{
@@ -99,6 +100,7 @@ public class Grid : MonoBehaviour
 
 	void Start () 
 	{
+		nextGenerate = Time.time;
 		int x = 0;
 
 		//Generate the crystals
@@ -113,9 +115,9 @@ public class Grid : MonoBehaviour
 	{
 		selectTower ();
 		//Enemy generation
-		if (Time.time >= enemyTimeGenerate)
+		if (Time.time >= nextGenerate)
 		{
-			enemyTimeGenerate = Time.time+enemyTimeGenerate;
+			nextGenerate = Time.time+enemyTimeGenerate;
 			grid[(int)Random.Range (0,xSize-1),zSize-1].GetComponent<Square>().generateEnemy();
 		}
 	}

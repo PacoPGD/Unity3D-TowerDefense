@@ -11,6 +11,8 @@ public class LaserBeam : MonoBehaviour {
 
 	private float nextDamageTime;
 
+	private Collider enemyCollider;
+	
 	// Use this for initialization
 	void Start () {
 		nextDamageTime = Time.time;
@@ -37,15 +39,24 @@ public class LaserBeam : MonoBehaviour {
 		else
 			line.SetPosition(1, ray.GetPoint(200));
 
-		if (Time.time >= nextDamageTime) {
-			if (hit.collider.gameObject.GetComponent<Enemy> ()) {
-				hit.collider.gameObject.GetComponent<Enemy> ().ApplyDamage (damagePerSecond);
-				nextDamageTime=Time.time+1;
+		if (hit.collider == enemyCollider) {
+			if (Time.time >= nextDamageTime) {
+				try { 
+					hit.collider.gameObject.GetComponent<Enemy> ().ApplyDamage (damagePerSecond);
+					nextDamageTime = Time.time + 1;
+				} 
+				catch {
+					Destroy (gameObject);
+				}
 			}
-
 		}
+
+
 
 	}
 
+	public void receiveEnemyCollider(Collider value){
+		enemyCollider = value;
+	}
 
 }
