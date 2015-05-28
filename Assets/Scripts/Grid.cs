@@ -3,36 +3,35 @@ using System.Collections;
 
 public class Grid : MonoBehaviour 
 {		
-	public GameObject square; //A plane GameObject, represent a square
-	public int xSize;// Number of squares in the x axis
-	public int zSize;// Number of squares in the z axis
-	public int crystals; //Number of crystals in game
-	public float enemyTimeGenerate; //Number of seconds between each enemy generation
+	public GameObject Square; //A plane GameObject, represent a square
+	public int XSize;// Number of squares in the x axis
+	public int ZSize;// Number of squares in the z axis
+	public int Crystals; //Number of crystals in game
+	public float EnemyTimeGenerate; //Number of seconds between each enemy generation
 
 	private int width = 10; //width of a square
 	private int height = 10; //height of a square
-
 	private GameObject [,] grid;  //set of squares representing the board
-
 	private float nextGenerate;
+
 	//Load the squares in the grid and load the status of squares in the gridstatus
 	void Awake()
 	{
-		grid = new GameObject[xSize,zSize];
+		grid = new GameObject[XSize,ZSize];
 
 		//Prepare the static gridStatus
-		gridStatus.myStatus = new gridStatus.Status[xSize, zSize];
-		gridStatus.xSize = xSize;
-		gridStatus.zSize = zSize;
+		gridStatus.myStatus = new gridStatus.Status[XSize, ZSize];
+		gridStatus.xSize = XSize;
+		gridStatus.zSize = ZSize;
 		gridStatus.towerSelection = 1;
 
-		for (int x = 0; x < xSize; x++) 
+		for (int x = 0; x < XSize; x++) 
 		{
-			for(int z = 0; z < zSize; z++)
+			for(int z = 0; z < ZSize; z++)
 			{
 				gridStatus.myStatus[x,z]=gridStatus.Status.Free;
 
-				GameObject gridPlane = (GameObject)Instantiate (square);
+				GameObject gridPlane = (GameObject)Instantiate (Square);
 				gridPlane.transform.position = new Vector3(gridPlane.transform.position.x +x*width,
 					gridPlane.transform.position.y, gridPlane.transform.position.z + z*height);  
 				grid[x,z] = gridPlane;
@@ -40,12 +39,12 @@ public class Grid : MonoBehaviour
 				grid [x,z].GetComponent<Square>().setZ(z);
 
 				//Define the center of the screen and send this center to cameramovement script 
-				if(x==xSize/2 && z==zSize/2){
-					GetComponent<CameraMovement>().setPivotPoint (grid[x,z].transform);
+				if(x==XSize/2 && z==ZSize/2){
+					GetComponent<CameraMovement>().SetPivotPoint (grid[x,z].transform);
 				}
 
 				//The squares enemies generator
-				if(z==zSize-1)
+				if(z==ZSize-1)
 					gridStatus.myStatus[x,z]=gridStatus.Status.Generator;
 			}
 		}
@@ -55,9 +54,9 @@ public class Grid : MonoBehaviour
 	//Paint lines to separate squares
 	void OnPostRender()
 	{
-		for (int x=0; x<xSize; x++)
+		for (int x=0; x<XSize; x++)
 		{
-			for (int z=0; z<zSize; z++)
+			for (int z=0; z<ZSize; z++)
 			{
 				float xPos = grid[x,z].transform.position.x-width/2;
 				float yPos = grid[x,z].transform.position.y+0.01f;
@@ -109,9 +108,9 @@ public class Grid : MonoBehaviour
 		int x = 0;
 
 		//Generate the crystals
-		while(x<crystals)
+		while(x<Crystals)
 		{
-			if(grid [Random.Range (0,xSize-1),Random.Range (1,zSize/3)].GetComponent<Square>().generateCrystal())
+			if(grid [Random.Range (0,XSize-1),Random.Range (1,ZSize/3)].GetComponent<Square>().generateCrystal())
 				x++;
 		}
 	}
@@ -122,8 +121,8 @@ public class Grid : MonoBehaviour
 		//Enemy generation
 		if (Time.time >= nextGenerate)
 		{
-			nextGenerate = Time.time+enemyTimeGenerate;
-			grid[(int)Random.Range (0,xSize-1),zSize-1].GetComponent<Square>().generateEnemy();
+			nextGenerate = Time.time+EnemyTimeGenerate;
+			grid[(int)Random.Range (0,XSize-1),ZSize-1].GetComponent<Square>().generateEnemy();
 		}
 	}
 

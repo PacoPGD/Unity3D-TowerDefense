@@ -3,12 +3,12 @@ using System.Collections;
 
 public class Square : MonoBehaviour {
 	
-	public GameObject crystal; //A crystal GameObject, represent a crystal
-	public GameObject blueCannonTurret; // blueCannonTurret GameObject, represent a Blue Cannon Turret
-	public GameObject redLaserTurret; // redLaserTurret GameObject, represent a Red Laser Turret
-	public GameObject enemyNormal; // enemyNormal GameObject, represent a Normal Enemy
-	public GameObject enemySwift; // enemySwift GameObject, represent a Normal Enemy
-	public GameObject enemyArmoured; // enemyArmoured GameObject, represent a Normal Enemy
+	public GameObject Crystal; //A crystal GameObject, represent a crystal
+	public GameObject BlueCannonTurret; // blueCannonTurret GameObject, represent a Blue Cannon Turret
+	public GameObject RedLaserTurret; // redLaserTurret GameObject, represent a Red Laser Turret
+	public GameObject EnemyNormal; // enemyNormal GameObject, represent a Normal Enemy
+	public GameObject EnemySwift; // enemySwift GameObject, represent a Normal Enemy
+	public GameObject EnemyArmoured; // enemyArmoured GameObject, represent a Normal Enemy
 
 	private int x;
 	private int z;
@@ -27,14 +27,14 @@ public class Square : MonoBehaviour {
 		{
 			if(gridStatus.towerSelection==1)
 			{
-				blueCannonTurret = (GameObject)Instantiate (blueCannonTurret);
-				blueCannonTurret.transform.position += transform.position;
+				BlueCannonTurret = (GameObject)Instantiate (BlueCannonTurret);
+				BlueCannonTurret.transform.position += transform.position;
 				gridStatus.myStatus[x,z] = gridStatus.Status.Tower;
 			}
 			else
 			{
-				redLaserTurret = (GameObject)Instantiate (redLaserTurret);
-				redLaserTurret.transform.position += transform.position;
+				RedLaserTurret = (GameObject)Instantiate (RedLaserTurret);
+				RedLaserTurret.transform.position += transform.position;
 				gridStatus.myStatus[x,z] = gridStatus.Status.Tower;
 			}
 		}
@@ -63,8 +63,8 @@ public class Square : MonoBehaviour {
 	{
 		if (gridStatus.myStatus[x,z]==gridStatus.Status.Free)
 		{
-			crystal = (GameObject)Instantiate (crystal);
-			crystal.transform.position += transform.position;
+			Crystal = (GameObject)Instantiate (Crystal);
+			Crystal.transform.position += transform.position;
 			gridStatus.myStatus[x,z]=gridStatus.Status.Crystal;
 			return true;
 		} 
@@ -90,20 +90,20 @@ public class Square : MonoBehaviour {
 
 	public void generateNormalEnemy()
 	{
-		enemyNormal = (GameObject)Instantiate (enemyNormal);
-		enemyNormal.transform.position = transform.position;
+		EnemyNormal = (GameObject)Instantiate (EnemyNormal);
+		EnemyNormal.transform.position = transform.position;
 	}
 
 	public void generateSwiftEnemy()
 	{
-		enemySwift = (GameObject)Instantiate (enemySwift);
-		enemySwift.transform.position = transform.position;
+		EnemySwift = (GameObject)Instantiate (EnemySwift);
+		EnemySwift.transform.position = transform.position;
 	}
 
 	public void generateArmouredEnemy()
 	{
-		enemyArmoured = (GameObject)Instantiate (enemyArmoured);
-		enemyArmoured.transform.position = transform.position;
+		EnemyArmoured = (GameObject)Instantiate (EnemyArmoured);
+		EnemyArmoured.transform.position = transform.position;
 	}
 
 	public void setX(int value)

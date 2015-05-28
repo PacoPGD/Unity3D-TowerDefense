@@ -4,13 +4,11 @@ using System.Collections;
 [RequireComponent (typeof(LineRenderer))]
 
 public class LaserBeam : MonoBehaviour {
-	
+
+	public int DamagePerSecond;
+
 	private LineRenderer line;
-
-	public int damagePerSecond=10;
-
 	private float nextDamageTime;
-
 	private Collider enemyCollider;
 	
 	// Use this for initialization
@@ -47,7 +45,7 @@ public class LaserBeam : MonoBehaviour {
 			{
 				try 
 				{ 
-					hit.collider.gameObject.GetComponent<Enemy> ().ApplyDamage (damagePerSecond);
+					hit.collider.gameObject.GetComponent<Enemy> ().ApplyDamage (DamagePerSecond);
 					nextDamageTime = Time.time + 1;
 				} 
 				catch 

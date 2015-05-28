@@ -3,11 +3,10 @@ using System.Collections;
 
 public class RedLaserTurret : MonoBehaviour {
 
-	public GameObject projectile;
+	public GameObject Projectile;
 	
 	private Transform target;
 	private Transform turretControl;
-
 	private float turnSpeed=10;
 
 
@@ -71,7 +70,7 @@ public class RedLaserTurret : MonoBehaviour {
 
 	void InstanceProjectile(Collider other)
 	{
-		laserBeam = (GameObject)Instantiate (projectile,turretControl.position,turretControl.rotation);
+		laserBeam = (GameObject)Instantiate (Projectile,turretControl.position,turretControl.rotation);
 		laserBeam.gameObject.GetComponent<LaserBeam> ().receiveEnemyCollider (other);
 	}
 

@@ -3,10 +3,10 @@ using System.Collections;
 
 public class CameraMovement : MonoBehaviour {
 	
-	public float moveSpeed;	// Speed of camera following mouse
-	public float zoomSpeed; // Speed of camera zoom
-	public float rotSpeed; // Speed of camera rotation
-	public bool naturalMotion = true;	 //this determines whether a left swipe will make the camera tumble clockwise or anticlockwise around the object
+	public float MoveSpeed;	// Speed of camera following mouse
+	public float ZoomSpeed; // Speed of camera zoom
+	public float RotSpeed; // Speed of camera rotation
+	public bool NaturalMotion = true;	 //this determines whether a left swipe will make the camera tumble clockwise or anticlockwise around the object
 
 
 	private Transform pivotPoint;	//this should be the location the camera tumbles around
@@ -39,27 +39,27 @@ public class CameraMovement : MonoBehaviour {
 
 		//HORIZONTAL
 		if(Input.mousePosition.x<0)
-			transform.position=transform.position+new Vector3(-moveSpeed*cos,0,moveSpeed*sin);
+			transform.position=transform.position+new Vector3(-MoveSpeed*cos,0,MoveSpeed*sin);
 		if(Input.mousePosition.x>Screen.width)
-			transform.position=transform.position+new Vector3(moveSpeed*cos,0,-moveSpeed*sin);
+			transform.position=transform.position+new Vector3(MoveSpeed*cos,0,-MoveSpeed*sin);
 
 		//VERTICAL
 		if(Input.mousePosition.y<0)
-			transform.position=transform.position+new Vector3(-moveSpeed*sin,0,-moveSpeed*cos);
+			transform.position=transform.position+new Vector3(-MoveSpeed*sin,0,-MoveSpeed*cos);
 		if(Input.mousePosition.y>Screen.height)
-			transform.position=transform.position+new Vector3(moveSpeed*sin,0,moveSpeed*cos);
+			transform.position=transform.position+new Vector3(MoveSpeed*sin,0,MoveSpeed*cos);
 	}
 
 	void CameraZoom()
 	{
 		//ZOOM IN
 		if (Input.GetAxis ("Mouse ScrollWheel") > 0) 
-			transform.position =transform.position+ new Vector3(0,-zoomSpeed,zoomSpeed);
+			transform.position =transform.position+ new Vector3(0,-ZoomSpeed,ZoomSpeed);
 
 
 		//ZOOM OUT
 		if (Input.GetAxis ("Mouse ScrollWheel") < 0) 
-			transform.position =transform.position+ new Vector3(0,zoomSpeed,-zoomSpeed);
+			transform.position =transform.position+ new Vector3(0,ZoomSpeed,-ZoomSpeed);
 
 	}
 
@@ -71,14 +71,14 @@ public class CameraMovement : MonoBehaviour {
 		if (Input.GetMouseButton(1))
 		{
 			float xDif = Input.mousePosition.x - oldInputPosition.x;
-			if(!naturalMotion){xDif *= -1;}
-			if(xDif != 0){camParent.transform.Rotate(Vector3.up * xDif * rotSpeed);}
+			if(!NaturalMotion){xDif *= -1;}
+			if(xDif != 0){camParent.transform.Rotate(Vector3.up * xDif * RotSpeed);}
 			oldInputPosition = Input.mousePosition;
 		}
 
 	}
 
-	public void setPivotPoint(Transform value)
+	public void SetPivotPoint(Transform value)
 	{
 		pivotPoint = value;
 	}

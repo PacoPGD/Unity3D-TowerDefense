@@ -3,9 +3,8 @@ using System.Collections;
 
 public class Projectile : MonoBehaviour {
 
-	public float speed = 150;
-
-	public int damage=10;
+	public float Speed;
+	public int Damage;
 
 
 	void Start()
@@ -15,7 +14,7 @@ public class Projectile : MonoBehaviour {
 
 	void Update ()
 	{
-		transform.Translate(Vector3.forward * Time.deltaTime * speed);
+		transform.Translate(Vector3.forward * Time.deltaTime * Speed);
 	}
 	
 
@@ -23,7 +22,7 @@ public class Projectile : MonoBehaviour {
 	{
 		if(other.gameObject.GetComponent<Enemy>())
 		{
-			other.gameObject.GetComponent<Enemy>().ApplyDamage(damage);
+			other.gameObject.GetComponent<Enemy>().ApplyDamage(Damage);
 			Destroy(gameObject);
 		}
 	}

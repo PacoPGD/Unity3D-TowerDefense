@@ -16,10 +16,10 @@ public class Enemy : MonoBehaviour {
 	private static int MOVING = 4; //Moving
 
 	//Public variables
-	public float velocity; //velocity in game of enemy
-	public int maxLife; //Max life of enemy
-	public GameObject lifePortion; //Object for representing a lifePortion
-	public float lifeBarSize; //Size of lifeBar
+	public float Velocity; //velocity in game of enemy
+	public int MaxLife; //Max life of enemy
+	public GameObject LifePortion; //Object for representing a lifePortion
+	public float LifeBarSize; //Size of lifeBar
 
 	//Private variables
 	private int life;//Actual life
@@ -27,9 +27,7 @@ public class Enemy : MonoBehaviour {
 	private int z; //Z coordinate in the board of this enemy
 	private Stack<int> routeX = new Stack<int>();//X coordinate in the board of destiny
 	private Stack<int> routeZ = new Stack<int>();//Z coordinate in the board of destiny
-
 	private int action=CALCULATING;//Action of the enemy
-
 	private float nextCalculating;//Time between calculations
 	private float timeRecalculating;//Time of next calculate
 
@@ -37,7 +35,7 @@ public class Enemy : MonoBehaviour {
 	void Start () 
 	{
 		nextCalculating = 1;
-		life = maxLife;
+		life = MaxLife;
 		initLifeBar ();
 	}
 
@@ -198,13 +196,13 @@ public class Enemy : MonoBehaviour {
 	public void goSquare(int squareX, int squareZ)
 	{
 		if (x < squareX)
-			transform.Translate(new Vector3 (1, 0, 0) * Time.deltaTime * velocity);
+			transform.Translate(new Vector3 (1, 0, 0) * Time.deltaTime * Velocity);
 		if (x > squareX)
-			transform.Translate(new Vector3 (-1, 0, 0) * Time.deltaTime * velocity);
+			transform.Translate(new Vector3 (-1, 0, 0) * Time.deltaTime * Velocity);
 		if (z < squareZ)
-			transform.Translate(new Vector3 (0, 0, 1) * Time.deltaTime * velocity);
+			transform.Translate(new Vector3 (0, 0, 1) * Time.deltaTime * Velocity);
 		if (z > squareZ)
-			transform.Translate(new Vector3 (0, 0, -1) * Time.deltaTime * velocity);
+			transform.Translate(new Vector3 (0, 0, -1) * Time.deltaTime * Velocity);
 	}
 
 	//BATTLE
@@ -217,7 +215,7 @@ public class Enemy : MonoBehaviour {
 	{
 		if (life <= 0) 
 		{
-			Destroy (lifePortion);
+			Destroy (LifePortion);
 			Destroy (gameObject);
 		}
 	}
@@ -225,16 +223,16 @@ public class Enemy : MonoBehaviour {
 	//LIFEBAR
 	public void initLifeBar()
 	{
-		lifePortion = (GameObject)Instantiate(lifePortion);
-		lifePortion.GetComponent<Renderer>().material.color = Color.red;
+		LifePortion = (GameObject)Instantiate(LifePortion);
+		LifePortion.GetComponent<Renderer>().material.color = Color.red;
 	
 	}
 
 	public void paintLife()
 	{
-		lifePortion.transform.position = (transform.position + new Vector3(1,5,0));
+		LifePortion.transform.position = (transform.position + new Vector3(1,5,0));
 
-		lifePortion.transform.localScale= new Vector3((life*lifeBarSize)/maxLife,1,1);
+		LifePortion.transform.localScale= new Vector3((life*LifeBarSize)/MaxLife,1,1);
 	}
 	
 

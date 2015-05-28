@@ -5,7 +5,6 @@ public class Node {
 	public int x;
 	public int z;
 	public int myStatus;
-
 	public double distance = Mathf.Infinity;
 	public Node previous=null;
 

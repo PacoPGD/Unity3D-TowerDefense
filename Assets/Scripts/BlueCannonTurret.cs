@@ -10,10 +10,8 @@ public class BlueCannonTurret : MonoBehaviour {
 
 	private Transform target;
 	private Transform turretControl;
-
 	private float turnSpeed=10;
 	private float firePauseTime =0.05f;
-
 	private double nextFireTime;
 	private float nextMoveTime;
 

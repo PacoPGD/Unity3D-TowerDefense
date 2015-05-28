@@ -7,7 +7,6 @@ public class Crystal : MonoBehaviour {
 	{
 		if (other.gameObject.GetComponent<Enemy> ()) {
 			Application.LoadLevel ("GameOverScene"); 
-			Debug.Log ("hello");
 		}
 
 	}
