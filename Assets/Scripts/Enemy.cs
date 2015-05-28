@@ -19,10 +19,9 @@ public class Enemy : MonoBehaviour {
 	public float velocity; //velocity in game of enemy
 	public int maxLife; //Max life of enemy
 	public GameObject lifePortion; //Object for representing a lifePortion
-
+	public float lifeBarSize; //Size of lifeBar
 
 	//Private variables
-	private GameObject [] lifeBar;//Array of object for representing the lifeBar
 	private int life;//Actual life
 	private int x; //X coordinate in the board of this enemy
 	private int z; //Z coordinate in the board of this enemy
@@ -38,7 +37,6 @@ public class Enemy : MonoBehaviour {
 	void Start () {
 		nextCalculating = 1;
 		life = maxLife;
-		lifeBar = new GameObject[maxLife];
 		initLifeBar ();
 	}
 
@@ -197,27 +195,23 @@ public class Enemy : MonoBehaviour {
 	}
 
 	public void checkDie(){
-		if(life<=0)
-			Destroy(gameObject);
+		if (life <= 0) {
+			Destroy (lifePortion);
+			Destroy (gameObject);
+		}
 	}
 
 	//LIFEBAR
 	public void initLifeBar(){
-		for (int i=0; i<maxLife; i++) {
-			lifeBar[i] = (GameObject)Instantiate(lifePortion);
-			lifeBar[i].GetComponent<Renderer>().material.color = Color.red;
-			lifeBar[i].transform.position = (transform.position+ new Vector3(i-5,5,0));
-		}
+		lifePortion = (GameObject)Instantiate(lifePortion);
+		lifePortion.GetComponent<Renderer>().material.color = Color.red;
+	
 	}
 
 	public void paintLife(){
-		for (int i=0; i<life; i++) {
-			lifeBar[i].transform.position = (transform.position+ new Vector3(i-5,5,0));
-		}
+		lifePortion.transform.position = (transform.position + new Vector3(1,5,0));
 
-		for (int i=life; i<maxLife; i++) {
-			Destroy(lifeBar[i].gameObject);
-		}
+		lifePortion.transform.localScale= new Vector3((life*lifeBarSize)/maxLife,1,1);
 	}
 	
 

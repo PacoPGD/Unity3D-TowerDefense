@@ -36,20 +36,21 @@ public class RedLaserTurret : MonoBehaviour {
 	}
 	
 
-	void OnTriggerStay(Collider other){
-		if (target == null){
+	void OnTriggerEnter(Collider other){
+		if (target == null) {
 			if (other.gameObject.GetComponent<Enemy> ()) {
 				target = other.gameObject.transform;
-				InstanceProjectile ();
+				InstanceProjectile (other);
 			}
 		}
+
 	}
 		
 	void OnTriggerExit(Collider other){
 		if (other.gameObject.GetComponent<Enemy> ()) {
 			if (other.gameObject.transform == target) {
 				target = null;
-				laserBeam = null;
+				Destroy (laserBeam);
 			}
 		}
 	}
@@ -63,13 +64,11 @@ public class RedLaserTurret : MonoBehaviour {
 		return desiredRotation;
 	}
 
-	void InstanceProjectile()
+	void InstanceProjectile(Collider other)
 	{
-
-
 		laserBeam = (GameObject)Instantiate (projectile,turretControl.position,turretControl.rotation);
-	
 	}
+
 
 }
 		

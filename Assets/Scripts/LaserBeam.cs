@@ -10,7 +10,7 @@ public class LaserBeam : MonoBehaviour {
 	public int damagePerSecond=10;
 
 	private float nextDamageTime;
-	
+
 	// Use this for initialization
 	void Start () {
 		nextDamageTime = Time.time;
@@ -42,8 +42,10 @@ public class LaserBeam : MonoBehaviour {
 				hit.collider.gameObject.GetComponent<Enemy> ().ApplyDamage (damagePerSecond);
 				nextDamageTime=Time.time+1;
 			}
+
 		}
 
 	}
-	
+
+
 }
