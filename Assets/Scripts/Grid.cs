@@ -53,9 +53,12 @@ public class Grid : MonoBehaviour
 	}
 
 	//Paint lines to separate squares
-	void OnPostRender(){
-		for (int x=0; x<xSize; x++){
-			for (int z=0; z<zSize; z++){
+	void OnPostRender()
+	{
+		for (int x=0; x<xSize; x++)
+		{
+			for (int z=0; z<zSize; z++)
+			{
 				float xPos = grid[x,z].transform.position.x-width/2;
 				float yPos = grid[x,z].transform.position.y+0.01f;
 				float zPos = grid[x,z].transform.position.z-height/2;
@@ -80,11 +83,13 @@ public class Grid : MonoBehaviour
 		string blue;
 		string red;
 
-		if (gridStatus.towerSelection == 1) {
+		if (gridStatus.towerSelection == 1) 
+		{
 			blue = "Blue Cannon Turret\n ACTIVE";
 			red = "Red Laser Turret";
 		}
-		else {
+		else 
+		{
 			blue = "Blue Cannon Turret";
 			red = "Red Laser Turret\n ACTIVE";
 		}

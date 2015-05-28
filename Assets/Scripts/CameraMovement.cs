@@ -23,14 +23,16 @@ public class CameraMovement : MonoBehaviour {
 	}
 
 
-	void LateUpdate () {
+	void LateUpdate () 
+	{
 		MouseFollow ();
 		CameraZoom ();
 		CameraRotation ();
 	}
 
 
-	void MouseFollow(){
+	void MouseFollow()
+	{
 		float Angle = camParent.transform.localEulerAngles.y;
 		float cos = Mathf.Cos (Angle*Mathf.PI/180.0f);
 		float sin = Mathf.Sin (Angle*Mathf.PI/180.0f);
@@ -48,23 +50,24 @@ public class CameraMovement : MonoBehaviour {
 			transform.position=transform.position+new Vector3(moveSpeed*sin,0,moveSpeed*cos);
 	}
 
-	void CameraZoom(){
+	void CameraZoom()
+	{
 		//ZOOM IN
-		if (Input.GetAxis ("Mouse ScrollWheel") > 0) {
+		if (Input.GetAxis ("Mouse ScrollWheel") > 0) 
 			transform.position =transform.position+ new Vector3(0,-zoomSpeed,zoomSpeed);
-		}
+
 
 		//ZOOM OUT
-		if (Input.GetAxis ("Mouse ScrollWheel") < 0) {
+		if (Input.GetAxis ("Mouse ScrollWheel") < 0) 
 			transform.position =transform.position+ new Vector3(0,zoomSpeed,-zoomSpeed);
-		}
+
 	}
 
-	void CameraRotation(){
+	void CameraRotation()
+	{
 		if (Input.GetMouseButtonDown(1))
-		{
 			oldInputPosition = Input.mousePosition;
-		}
+
 		if (Input.GetMouseButton(1))
 		{
 			float xDif = Input.mousePosition.x - oldInputPosition.x;
@@ -75,7 +78,8 @@ public class CameraMovement : MonoBehaviour {
 
 	}
 
-	public void setPivotPoint(Transform value){
+	public void setPivotPoint(Transform value)
+	{
 		pivotPoint = value;
 	}
 }

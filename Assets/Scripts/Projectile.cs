@@ -8,7 +8,8 @@ public class Projectile : MonoBehaviour {
 	public int damage=10;
 
 
-	void Start(){
+	void Start()
+	{
 		gameObject.GetComponent<Renderer>().material.color = Color.blue;
 	}
 
@@ -18,7 +19,8 @@ public class Projectile : MonoBehaviour {
 	}
 	
 
-	void OnTriggerEnter(Collider other){
+	void OnTriggerEnter(Collider other)
+	{
 		if(other.gameObject.GetComponent<Enemy>())
 		{
 			other.gameObject.GetComponent<Enemy>().ApplyDamage(damage);

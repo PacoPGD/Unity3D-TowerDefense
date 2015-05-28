@@ -18,7 +18,8 @@ public class BlueCannonTurret : MonoBehaviour {
 	private float nextMoveTime;
 
 
-	void Start(){
+	void Start()
+	{
 		turretControl = transform.GetChild (0);
 	}
 
@@ -40,19 +41,22 @@ public class BlueCannonTurret : MonoBehaviour {
 	}
 	
 
-	void OnTriggerStay(Collider other){
-		if (target == null){
-			if (other.gameObject.GetComponent<Enemy> ()) {
+	void OnTriggerStay(Collider other)
+	{
+		if (target == null)
+		{
+			if (other.gameObject.GetComponent<Enemy> ()) 
+			{
 				nextFireTime = Time.time + (reloadTime * 0.5);
 				target = other.gameObject.transform;
 			}
 		}
 	}
 		
-	void OnTriggerExit(Collider other){
-		if (other.gameObject.transform==target) {
+	void OnTriggerExit(Collider other)
+	{
+		if (other.gameObject.transform==target) 
 			target = null;
-		}
 	}
 		
 	Quaternion CalculateAimPosition()

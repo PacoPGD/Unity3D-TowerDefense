@@ -14,27 +14,32 @@ public class RedLaserTurret : MonoBehaviour {
 
 	private GameObject laserBeam;
 
-	void Start(){
+	void Start()
+	{
 		turretControl = transform.GetChild (0);
 	}
 
 	
 	void Update ()
 	{
-		if (target) {
+		if (target) 
+		{
 			turretControl.rotation = Quaternion.Lerp (turretControl.rotation, CalculateAimPosition (), Time.deltaTime * turnSpeed);
 
 			laserBeam.transform.rotation = turretControl.rotation;
-		} else {
-				Destroy (laserBeam);
-		}
+		} 
+		else 
+			Destroy (laserBeam);
+
 	}
 	
 
-	void OnTriggerStay(Collider other){
-
-		if (target == null) {
-			if (other.gameObject.GetComponent<Enemy> ()) {
+	void OnTriggerStay(Collider other)
+	{
+		if (target == null) 
+		{
+			if (other.gameObject.GetComponent<Enemy> ())
+			{
 				Destroy (laserBeam);
 				target = other.gameObject.transform;
 				InstanceProjectile (other);
@@ -43,9 +48,12 @@ public class RedLaserTurret : MonoBehaviour {
 
 	}
 		
-	void OnTriggerExit(Collider other){
-		if (other.gameObject.GetComponent<Enemy> ()) {
-			if (other.gameObject.transform == target) {
+	void OnTriggerExit(Collider other)
+	{
+		if (other.gameObject.GetComponent<Enemy> ()) 
+		{
+			if (other.gameObject.transform == target) 
+			{
 				target = null;
 				Destroy (laserBeam);
 			}

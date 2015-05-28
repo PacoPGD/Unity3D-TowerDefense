@@ -9,7 +9,8 @@ public class Node {
 	public double distance = Mathf.Infinity;
 	public Node previous=null;
 
-	public Node(int status, int valueX, int valueZ){
+	public Node(int status, int valueX, int valueZ)
+	{
 		myStatus = status;
 		x = valueX;
 		z = valueZ;

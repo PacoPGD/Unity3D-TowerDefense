@@ -14,7 +14,8 @@ public class LaserBeam : MonoBehaviour {
 	private Collider enemyCollider;
 	
 	// Use this for initialization
-	void Start () {
+	void Start () 
+	{
 		nextDamageTime = Time.time;
 		line = GetComponent<LineRenderer>();
 		line.SetWidth(1, 1);
@@ -23,7 +24,8 @@ public class LaserBeam : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
+	void Update () 
+	{
 		Vector3 myAngle = transform.rotation.eulerAngles;
 
 		Ray ray = new Ray(transform.position, Quaternion.AngleAxis(myAngle.y, transform.up) *Vector3.forward);
@@ -39,13 +41,17 @@ public class LaserBeam : MonoBehaviour {
 		else
 			line.SetPosition(1, ray.GetPoint(200));
 
-		if (hit.collider == enemyCollider) {
-			if (Time.time >= nextDamageTime) {
-				try { 
+		if (hit.collider == enemyCollider) 
+		{
+			if (Time.time >= nextDamageTime) 
+			{
+				try 
+				{ 
 					hit.collider.gameObject.GetComponent<Enemy> ().ApplyDamage (damagePerSecond);
 					nextDamageTime = Time.time + 1;
 				} 
-				catch {
+				catch 
+				{
 					Destroy (gameObject);
 				}
 			}
@@ -55,7 +61,8 @@ public class LaserBeam : MonoBehaviour {
 
 	}
 
-	public void receiveEnemyCollider(Collider value){
+	public void receiveEnemyCollider(Collider value)
+	{
 		enemyCollider = value;
 	}
 

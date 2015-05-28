@@ -34,21 +34,25 @@ public class Enemy : MonoBehaviour {
 	private float timeRecalculating;//Time of next calculate
 
 
-	void Start () {
+	void Start () 
+	{
 		nextCalculating = 1;
 		life = maxLife;
 		initLifeBar ();
 	}
 
 
-	void Update () {
+	void Update () 
+	{
 		//Action depens of action variable
-		if (action == CALCULATING) {
+		if (action == CALCULATING) 
+		{
 			timeRecalculating=Time.time+nextCalculating;
 			routeCalculation ();
 			action = MOVING;
 		} 
-		else if (action == MOVING) {
+		else if (action == MOVING) 
+		{
 			move ();
 		}
 
@@ -79,15 +83,17 @@ public class Enemy : MonoBehaviour {
 		//Save the gridStatus in myNode variable
 		myNode = new Node[gridStatus.xSize, gridStatus.zSize];
 		
-		for (int i=0; i<gridStatus.xSize; i++) {
-			for(int j=0; j<gridStatus.zSize; j++){
+		for (int i=0; i<gridStatus.xSize; i++) 
+		{
+			for(int j=0; j<gridStatus.zSize; j++)
+			{
 				if(gridStatus.myStatus[i,j]==gridStatus.Status.Crystal)
 					myNode[i,j] = new Node(GOAL,i,j);
 				else if(gridStatus.myStatus[i,j]==gridStatus.Status.Free)
 					myNode[i,j] = new Node(FREE,i,j);
-				else{
+				else
 					myNode[i,j] = new Node(BLOCK,i,j);
-				}
+
 			}
 		}
 		
@@ -100,28 +106,32 @@ public class Enemy : MonoBehaviour {
 			checking = tail.Dequeue ();
 	
 			//Check the neighbors of checking node
-			for(int i=-1;i<=1;i++){
-				for(int j=-1;j<=1;j++){
-					if(inBoard (checking.x+i,checking.z+j)){
+			for(int i=-1;i<=1;i++)
+			{
+				for(int j=-1;j<=1;j++)
+				{
+					if(inBoard (checking.x+i,checking.z+j))
+					{
 						//Distances between squares
-						if(i==0 && j==0){
+						if(i==0 && j==0)
 							distanceBetweenSquare = 1.0f; //Next to square
-						}
-						else{
+						else
 							distanceBetweenSquare = 1.41f; //Diagonal
-						}
+
 
 						neighbor = myNode[checking.x+i,checking.z+j];
 
 						if((neighbor.distance)>(checking.distance+distanceBetweenSquare))
 						{
-							if(neighbor.myStatus == FREE){
+							if(neighbor.myStatus == FREE)
+							{
 									neighbor.distance = checking.distance+distanceBetweenSquare;
 									neighbor.previous = checking;
 									tail.Enqueue (neighbor);
 							}
 							
-							else if (neighbor.myStatus==GOAL){
+							else if (neighbor.myStatus==GOAL)
+							{
 									neighbor.distance=checking.distance+distanceBetweenSquare;
 									neighbor.previous = checking;
 									goal = neighbor;
@@ -137,20 +147,24 @@ public class Enemy : MonoBehaviour {
 	}
 
 	//Clean the route to a node
-	public void cleanRoute() {
+	public void cleanRoute() 
+	{
 		routeX.Clear ();
 		routeZ.Clear ();
 	}
 
 	//Write the route to a node
-	public void writeRoute(Node destiny){
+	public void writeRoute(Node destiny)
+	{
 		Node aux;
 		aux = destiny;
 
 		cleanRoute ();
 
-		if (destiny != null) {
-			while (aux.previous!=null) {
+		if (destiny != null) 
+		{
+			while (aux.previous!=null) 
+			{
 				routeX.Push (aux.x);
 				routeZ.Push (aux.z);
 				aux = aux.previous;
@@ -162,15 +176,18 @@ public class Enemy : MonoBehaviour {
 
 	//MOVING
 	//Visit the squares of route
-	public void move(){
+	public void move()
+	{
 		int xDestiny;
 		int zDestiny;
-		if (routeX.Count != 0) {
+		if (routeX.Count != 0) 
+		{
 			xDestiny = routeX.Peek ();
 			zDestiny = routeZ.Peek ();
 			goSquare (xDestiny, zDestiny);
 
-			if (x == xDestiny && z == zDestiny) {
+			if (x == xDestiny && z == zDestiny)
+			{
 				routeX.Pop ();
 				routeZ.Pop ();
 			}
@@ -178,7 +195,8 @@ public class Enemy : MonoBehaviour {
 	}
 
 	//Go to a specific square
-	public void goSquare(int squareX, int squareZ){
+	public void goSquare(int squareX, int squareZ)
+	{
 		if (x < squareX)
 			transform.Translate(new Vector3 (1, 0, 0) * Time.deltaTime * velocity);
 		if (x > squareX)
@@ -190,25 +208,30 @@ public class Enemy : MonoBehaviour {
 	}
 
 	//BATTLE
-	public void ApplyDamage(int damage){
+	public void ApplyDamage(int damage)
+	{
 		life = life - damage;
 	}
 
-	public void checkDie(){
-		if (life <= 0) {
+	public void checkDie()
+	{
+		if (life <= 0) 
+		{
 			Destroy (lifePortion);
 			Destroy (gameObject);
 		}
 	}
 
 	//LIFEBAR
-	public void initLifeBar(){
+	public void initLifeBar()
+	{
 		lifePortion = (GameObject)Instantiate(lifePortion);
 		lifePortion.GetComponent<Renderer>().material.color = Color.red;
 	
 	}
 
-	public void paintLife(){
+	public void paintLife()
+	{
 		lifePortion.transform.position = (transform.position + new Vector3(1,5,0));
 
 		lifePortion.transform.localScale= new Vector3((life*lifeBarSize)/maxLife,1,1);
@@ -217,16 +240,19 @@ public class Enemy : MonoBehaviour {
 
 
 	//AUXILIARS
-	public void setX(int value){
+	public void setX(int value)
+	{
 		x = value;
 	}
 
-	public void setZ(int value){
+	public void setZ(int value)
+	{
 		z = value;
 	}
 
 	//Check if the position exists on the board
-	public bool inBoard(int x, int z){
+	public bool inBoard(int x, int z)
+	{
 		if (z >= 0 && z < gridStatus.zSize && x >= 0 && x < gridStatus.xSize) 
 			return true;
 		else
@@ -234,9 +260,12 @@ public class Enemy : MonoBehaviour {
 	}
 
 	//Print the status of the board
-	public void logBoard(Node[,] myNode){
-		for (int i=0; i<gridStatus.xSize; i++) {
-			for(int j=0; j<gridStatus.zSize; j++){
+	public void logBoard(Node[,] myNode)
+	{
+		for (int i=0; i<gridStatus.xSize; i++) 
+		{
+			for(int j=0; j<gridStatus.zSize; j++)
+			{
 				Debug.Log ("Node "+i+" "+j+" "+myNode[i,j].myStatus);
 			}
 		}
