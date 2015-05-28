@@ -6,11 +6,10 @@ public class CameraMovement : MonoBehaviour {
 	public float moveSpeed;	// Speed of camera following mouse
 	public float zoomSpeed; // Speed of camera zoom
 	public float rotSpeed; // Speed of camera rotation
+	public bool naturalMotion = true;	 //this determines whether a left swipe will make the camera tumble clockwise or anticlockwise around the object
 
 
 	private Transform pivotPoint;	//this should be the location the camera tumbles around
-	public bool naturalMotion = true;	 //this determines whether a left swipe will make the camera tumble clockwise or anticlockwise around the object
-	
 	private GameObject camParent;	//this will be the rotating parent to which the camera is attached. Rotating this object will have the effect of making the camera a specified location.
 	private Vector2 oldInputPosition; 
 
@@ -32,17 +31,21 @@ public class CameraMovement : MonoBehaviour {
 
 
 	void MouseFollow(){
+		float Angle = camParent.transform.localEulerAngles.y;
+		float cos = Mathf.Cos (Angle*Mathf.PI/180.0f);
+		float sin = Mathf.Sin (Angle*Mathf.PI/180.0f);
+
 		//HORIZONTAL
 		if(Input.mousePosition.x<0)
-			transform.position=transform.position-new Vector3(moveSpeed,0,0);
+			transform.position=transform.position+new Vector3(-moveSpeed*cos,0,moveSpeed*sin);
 		if(Input.mousePosition.x>Screen.width)
-			transform.position=transform.position+new Vector3(moveSpeed,0,0);
+			transform.position=transform.position+new Vector3(moveSpeed*cos,0,-moveSpeed*sin);
 
 		//VERTICAL
 		if(Input.mousePosition.y<0)
-			transform.position=transform.position-new Vector3(0,0,moveSpeed);
+			transform.position=transform.position+new Vector3(-moveSpeed*sin,0,-moveSpeed*cos);
 		if(Input.mousePosition.y>Screen.height)
-			transform.position=transform.position+new Vector3(0,0,moveSpeed);
+			transform.position=transform.position+new Vector3(moveSpeed*sin,0,moveSpeed*cos);
 	}
 
 	void CameraZoom(){
